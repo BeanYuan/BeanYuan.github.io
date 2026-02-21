@@ -1,10 +1,44 @@
-// 更新页脚年份
+// =========================
+// Theme toggle (Light/Dark)
+// =========================
+const THEME_KEY = "lizhuoyuan_theme";
+
+function applyTheme(theme) {
+    document.body.classList.toggle("theme-light", theme === "light");
+}
+
+(function initTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === "light" || saved === "dark") {
+        applyTheme(saved);
+    } else {
+        // Default: light (brighter)
+        applyTheme("light");
+        localStorage.setItem(THEME_KEY, "light");
+    }
+})();
+
+const toggleBtn = document.querySelector(".theme-toggle");
+if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+        const isLight = document.body.classList.contains("theme-light");
+        const next = isLight ? "dark" : "light";
+        applyTheme(next);
+        localStorage.setItem(THEME_KEY, next);
+    });
+}
+
+// =========================
+// Footer year
+// =========================
 const yearSpan = document.getElementById("year");
 if (yearSpan) {
     yearSpan.textContent = new Date().getFullYear();
 }
 
-// 导航平滑滚动（只对本页内锚点用，外链 PDF 不受影响）
+// =========================
+// Smooth scrolling (anchors only)
+// =========================
 document.querySelectorAll(".nav a").forEach((link) => {
     link.addEventListener("click", (event) => {
         const targetId = link.getAttribute("href");

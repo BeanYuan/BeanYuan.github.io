@@ -98,6 +98,7 @@ body {
     display: flex;
     gap: 1.6rem;
     font-size: 0.95rem;
+    align-items: center;
 }
 
 .nav a {
@@ -125,6 +126,23 @@ body {
 
 .nav a:hover::after {
     width: 100%;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    border: 1px solid rgba(244, 196, 95, 0.55);
+    background: rgba(16, 29, 24, 0.5);
+    color: #f7f0dc;
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    border-color: rgba(244, 196, 95, 0.9);
 }
 
 /* =========================
@@ -198,322 +216,362 @@ body {
     border-radius: 999px;
     padding: 0.75rem 1.9rem;
     font-size: 0.9rem;
-    text-decoration: none;
-    border: 2px solid #0a1510;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 2px solid transparent;
     cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.4rem;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    box-shadow:
-        0 3px 0 #0a1510,
-        0 10px 18px rgba(0, 0, 0, 0.4);
-    transition:
-        transform 0.08s ease-out,
-        box-shadow 0.08s ease-out,
-        filter 0.08s ease-out;
-}
-
-.btn:active {
-    transform: translateY(2px);
-    box-shadow:
-        0 1px 0 #0a1510,
-        0 4px 10px rgba(0, 0, 0, 0.5);
+    text-decoration: none;
 }
 
 .btn-primary {
-    background: linear-gradient(#f8cf6f, #e59b37);
-    color: #28170b;
+    background: linear-gradient(135deg, #f4c45f 0, #b3ffcb 130%);
+    color: #112218;
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.3);
 }
 
 .btn-ghost {
-    background: linear-gradient(#234134, #182c23);
-    color: #e7f6eb;
-    border-color: #20372c;
+    background: rgba(16, 29, 24, 0.5);
+    color: #e5f7ea;
+    border-color: rgba(247, 234, 181, 0.35);
 }
 
 .btn:hover {
-    filter: brightness(1.05);
+    transform: translateY(-1px);
+    box-shadow: 0 16px 28px rgba(0, 0, 0, 0.32);
 }
 
-/* Hero 右侧：冒险者信息卡 */
+/* Hero card */
 .hero-card {
-    border-radius: 1.4rem;
-    border: 2px solid #c39c52;
-    background:
-        radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.12) 0, transparent 60%),
-        linear-gradient(145deg, #22362c, #121d18);
-    box-shadow:
-        0 6px 0 #8c6d3a,
-        0 16px 26px rgba(0, 0, 0, 0.65);
+    border-radius: 18px;
+    border: 2px solid rgba(119, 216, 160, 0.28);
+    background: rgba(10, 18, 14, 0.56);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
     overflow: hidden;
-    font-size: 0.9rem;
-    color: #f4f5f0;
 }
 
 .hero-card-header {
-    padding: 0.6rem 1.2rem;
-    background: linear-gradient(90deg, #2f4637, #25352b);
-    border-bottom: 2px solid #8c6d3a;
+    padding: 1rem 1.2rem;
+    background: rgba(24, 44, 36, 0.85);
+    border-bottom: 1px solid rgba(119, 216, 160, 0.18);
 }
 
 .hero-card-title {
     font-family: "Cinzel", serif;
-    font-size: 0.78rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: #f5e2b9;
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: #f7f0dc;
 }
 
 .hero-card-body {
-    padding: 1.15rem 1.25rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
+    padding: 1.1rem 1.2rem 1.2rem;
+    display: grid;
+    gap: 0.9rem;
 }
 
 .hero-card-row {
     display: flex;
+    align-items: baseline;
     justify-content: space-between;
-    gap: 1.5rem;
-    font-size: 0.85rem;
+    gap: 1rem;
 }
 
 .hero-label {
-    color: #c7e2d1;
+    color: rgba(229, 247, 234, 0.7);
+    font-size: 0.82rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 0.75rem;
 }
 
 .hero-value {
-    color: #f4f5f0;
-    text-align: right;
+    color: #e5f7ea;
+    font-weight: 700;
 }
 
-/* =========================
-   Section 标题
-   ========================= */
+/* Section titles */
 .section-title {
     font-family: "Cinzel", serif;
-    font-size: 1.7rem;
-    margin-bottom: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: #f6f0e1;
-    position: relative;
-    display: inline-block;
-}
-
-.section-title::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -0.3rem;
-    width: 58%;
-    height: 4px;
-    background: linear-gradient(90deg, #f4c45f, #7ad3a0);
-    border-radius: 999px;
+    letter-spacing: 0.16em;
+    font-size: 1.35rem;
+    margin-bottom: 0.55rem;
+    color: #f7f0dc;
 }
 
 .section-intro {
-    max-width: 42rem;
-    color: #d0e2d4;
-    margin-bottom: 2.1rem;
+    max-width: 55rem;
+    color: rgba(229, 247, 234, 0.86);
+    margin-bottom: 2rem;
 }
 
-/* =========================
-   About 区域
-   ========================= */
+/* About */
 .about-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.6rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
 }
 
 .about-block {
-    background: radial-gradient(circle at 0% 0%, rgba(118, 201, 160, 0.18) 0, transparent 75%),
-        linear-gradient(145deg, #1a2922, #111a16);
-    border-radius: 1.1rem;
-    border: 1px solid rgba(192, 229, 204, 0.4);
-    padding: 1.4rem 1.5rem 1.3rem;
-    box-shadow:
-        0 4px 0 rgba(0, 0, 0, 0.7),
-        0 10px 18px rgba(0, 0, 0, 0.45);
+    border-radius: 16px;
+    padding: 1.4rem 1.4rem;
+    background: rgba(10, 18, 14, 0.56);
+    border: 1px solid rgba(119, 216, 160, 0.22);
 }
 
 .about-block h3 {
-    font-size: 1.05rem;
-    margin-bottom: 0.7rem;
-    color: #f5eedf;
+    font-family: "Cinzel", serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+    color: #f4c45f;
 }
 
 .about-block ul {
-    list-style: none;
-    color: #cfdfd4;
-    font-size: 0.92rem;
+    margin-left: 1.1rem;
 }
 
-.about-block li + li {
-    margin-top: 0.3rem;
+.about-block li {
+    margin-bottom: 0.4rem;
+    color: rgba(229, 247, 234, 0.92);
 }
 
-/* =========================
-   Projects 区域：卡牌 UI
-   ========================= */
+/* Projects */
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.8rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
 }
 
 .project-card {
-    background:
-        radial-gradient(circle at 0% 0%, rgba(231, 200, 130, 0.14) 0, transparent 70%),
-        linear-gradient(150deg, #1b2923, #121b17);
-    border-radius: 1.2rem;
-    padding: 1.5rem 1.5rem 1.3rem;
-    border: 2px solid rgba(199, 165, 107, 0.8);
-    box-shadow:
-        0 4px 0 #8b6a39,
-        0 12px 22px rgba(0, 0, 0, 0.6);
-    position: relative;
-    overflow: hidden;
+    border-radius: 16px;
+    padding: 1.35rem 1.35rem;
+    background: rgba(10, 18, 14, 0.56);
+    border: 1px solid rgba(119, 216, 160, 0.22);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
 }
 
 .project-tag {
     display: inline-flex;
-    padding: 0.18rem 0.7rem;
-    border-radius: 999px;
-    border: 2px solid rgba(199, 165, 107, 0.95);
-    font-size: 0.7rem;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: #f8e5b8;
-    margin-bottom: 0.65rem;
-    background: rgba(20, 24, 17, 0.85);
+    color: #b4e7bf;
+    margin-bottom: 0.55rem;
 }
 
 .project-title {
-    font-size: 1.08rem;
-    margin-bottom: 0.35rem;
-    color: #f7f2e4;
+    font-family: "Cinzel", serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.45rem;
 }
 
 .project-desc {
-    font-size: 0.9rem;
-    color: #d2e1d5;
-    margin-bottom: 0.8rem;
+    color: rgba(229, 247, 234, 0.9);
+    margin-bottom: 0.9rem;
 }
 
 .project-meta {
-    list-style: none;
-    font-size: 0.8rem;
-    color: #afc4b7;
-}
-
-.project-meta li + li {
-    margin-top: 0.18rem;
+    margin-left: 1.15rem;
+    margin-bottom: 0.95rem;
+    color: rgba(229, 247, 234, 0.82);
 }
 
 .project-link {
-    margin-top: 0.9rem;
     display: inline-flex;
-    font-size: 0.85rem;
+    margin-right: 0.9rem;
     color: #f4c45f;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .project-link:hover {
     text-decoration: underline;
 }
 
-/* =========================
-   Contact 区域
-   ========================= */
+.project-links {
+    display: flex;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.project-soon {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px dashed rgba(244, 196, 95, 0.6);
+    color: rgba(247, 240, 220, 0.92);
+    font-size: 0.82rem;
+}
+
+/* Contact */
 .contact-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.6rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
 }
 
 .contact-block {
-    background:
-        radial-gradient(circle at 0% 0%, rgba(116, 197, 158, 0.16) 0, transparent 70%),
-        linear-gradient(145deg, #182821, #101a16);
-    border-radius: 1.1rem;
-    border: 1px solid rgba(189, 223, 204, 0.4);
-    padding: 1.4rem 1.5rem;
-    box-shadow:
-        0 4px 0 rgba(0, 0, 0, 0.7),
-        0 10px 18px rgba(0, 0, 0, 0.5);
-}
-
-.contact-block h3 {
-    font-size: 1rem;
-    margin-bottom: 0.6rem;
-    color: #f6f0e2;
+    border-radius: 16px;
+    padding: 1.4rem 1.4rem;
+    background: rgba(10, 18, 14, 0.56);
+    border: 1px solid rgba(119, 216, 160, 0.22);
 }
 
 .contact-link {
     color: #f4c45f;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-weight: 700;
 }
 
 .contact-link:hover {
     text-decoration: underline;
 }
 
-.contact-block ul {
-    list-style: none;
-}
-
-.contact-block li + li {
-    margin-top: 0.25rem;
-}
-
-/* =========================
-   Footer
-   ========================= */
 .site-footer {
-    padding: 1.4rem 7vw 1.9rem;
+    padding: 2.2rem 7vw;
+    color: rgba(229, 247, 234, 0.78);
     text-align: center;
-    font-size: 0.8rem;
-    color: #d1e1d6;
-    background: linear-gradient(#111a15, #070c09);
-    border-top: 2px solid #283f34;
-    box-shadow: 0 -4px 0 rgba(0, 0, 0, 0.8);
+    border-top: 1px solid rgba(119, 216, 160, 0.18);
 }
 
-/* =========================
-   响应式
-   ========================= */
-@media (max-width: 800px) {
-    .site-header {
-        padding-inline: 5vw;
-    }
-
+/* Responsive */
+@media (max-width: 900px) {
     .hero {
         grid-template-columns: 1fr;
-        padding-top: 3.5rem;
-        padding-bottom: 3.8rem;
+        min-height: unset;
     }
-
-    .hero-card {
-        order: -1;
-        margin-bottom: 0.9rem;
+    .projects-grid {
+        grid-template-columns: 1fr;
     }
-
+    .about-grid,
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
     .nav {
-        gap: 1.1rem;
-        font-size: 0.72rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: flex-end;
     }
+}
 
-    .section {
-        padding-inline: 5vw;
-    }
+/* =========================
+   Light theme overrides
+   ========================= */
+body.theme-light {
+    background:
+        radial-gradient(circle at 0% 0%, rgba(120, 220, 180, 0.18) 0, transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(120, 200, 255, 0.14) 0, transparent 55%),
+        linear-gradient(to bottom, #f7fbf9 0, #eef6f2 60%, #eaf2ee 100%);
+    color: #111;
+}
+
+body.theme-light .bg-noise {
+    opacity: 0.06;
+    mix-blend-mode: multiply;
+}
+
+body.theme-light .site-header {
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+body.theme-light .nav a {
+    color: rgba(12, 26, 18, 0.88);
+    opacity: 1;
+}
+
+body.theme-light .logo {
+    color: rgba(12, 26, 18, 0.92);
+}
+
+body.theme-light .logo-text {
+    text-shadow: none;
+}
+
+body.theme-light .logo-glow {
+    color: #1f7a52;
+    text-shadow: none;
+}
+
+body.theme-light .theme-toggle {
+    background: rgba(255, 255, 255, 0.9);
+    color: rgba(12, 26, 18, 0.88);
+    border-color: rgba(31, 122, 82, 0.35);
+}
+
+body.theme-light .hero-kicker {
+    color: #1f7a52;
+}
+
+body.theme-light .hero-title {
+    color: rgba(12, 26, 18, 0.92);
+    text-shadow: none;
+}
+
+body.theme-light .hero-subtitle,
+body.theme-light .hero-desc,
+body.theme-light .section-intro {
+    color: rgba(12, 26, 18, 0.78);
+}
+
+body.theme-light .hero-card,
+body.theme-light .about-block,
+body.theme-light .project-card,
+body.theme-light .contact-block {
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+}
+
+body.theme-light .hero-card-header {
+    background: rgba(245, 251, 248, 0.9);
+}
+
+body.theme-light .hero-label {
+    color: rgba(12, 26, 18, 0.55);
+}
+
+body.theme-light .hero-value {
+    color: rgba(12, 26, 18, 0.85);
+}
+
+body.theme-light .section-title {
+    color: rgba(12, 26, 18, 0.92);
+}
+
+body.theme-light .about-block h3 {
+    color: #1f7a52;
+}
+
+body.theme-light .about-block li,
+body.theme-light .project-desc,
+body.theme-light .project-meta,
+body.theme-light .site-footer {
+    color: rgba(12, 26, 18, 0.78);
+}
+
+body.theme-light .project-tag {
+    color: #1f7a52;
+}
+
+body.theme-light .project-link,
+body.theme-light .contact-link {
+    color: #b06b00;
+}
+
+body.theme-light .project-soon {
+    border-color: rgba(31, 122, 82, 0.35);
+    color: rgba(12, 26, 18, 0.78);
 }
