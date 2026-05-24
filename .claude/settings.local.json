@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git ls-remote *)",
+      "Bash(ls -la .claude 2>&1; echo \"---skills---\"; ls -la .claude/skills 2>&1; echo \"---user skills---\"; ls -la ~/.claude/skills 2>&1)"
+    ]
+  }
+}

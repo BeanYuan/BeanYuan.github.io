@@ -1,300 +1,456 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Lizhuoyuan Wan · Portfolio</title>
+    <title>Lizhuoyuan Wan — Programmer &amp; Game Designer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- 奇幻风字体（保持和上次一致） -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Source+Sans+3:wght@400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
         rel="stylesheet"
     />
 
     <link rel="stylesheet" href="style.css" />
+    <script>document.documentElement.classList.add("js-reveal");</script>
 </head>
 <body>
-    <div class="bg-noise"></div>
-
     <header class="site-header">
-        <div class="logo">
-            <span class="logo-mark">◆</span>
-            <span class="logo-text">Lizhuoyuan</span>
-            <span class="logo-glow">Wan</span>
-        </div>
+        <a href="#home" class="wordmark">Lizhuoyuan&nbsp;Wan</a>
         <nav class="nav">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#projects">Portfolio</a>
-            <a href="#contact">Contact</a>
-            <!-- 直接打开 latest CV 的链接 -->
-            <a href="pdf/Lizhuoyuan Wan CV lastest.pdf" target="_blank" rel="noopener">CV (PDF)</a>
-            <button class="theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">
-                Light/Dark
+            <a href="#work" data-i18n="nav.work">Work</a>
+            <a href="#about" data-i18n="nav.about">About</a>
+            <a href="#contact" data-i18n="nav.contact">Contact</a>
+            <a href="pdf/Lizhuoyuan Wan CV lastest.pdf" target="_blank" rel="noopener" data-i18n="nav.cv">CV</a>
+            <button class="theme-toggle" type="button" aria-label="Toggle light or dark theme" data-i18n="nav.theme">
+                Theme
             </button>
+            <button class="lang-toggle" type="button" aria-label="切换到中文">中文</button>
         </nav>
     </header>
 
     <main>
-        <!-- Home / Hero -->
-        <section id="home" class="section hero">
-            <div class="hero-content">
-                <p class="hero-kicker">WELCOME ADVENTURER</p>
+        <!-- Hero -->
+        <section id="home" class="hero">
+            <div class="hero-media" aria-hidden="true"></div>
+            <div class="hero-inner">
+                <p class="hero-eyebrow" data-i18n="hero.eyebrow">Programmer · Game &amp; System Designer</p>
                 <h1 class="hero-title">Lizhuoyuan Wan</h1>
-                <p class="hero-subtitle">
-                    Programmer · Game / System Designer
-                </p>
-                <p class="hero-desc">
-                    I build systems, games, and interactive experiences.
-                    This portfolio collects a few selected projects with
-                    full PDF case studies, like quests in a game: each one
-                    has its own background, decisions, and outcomes.
+                <p class="hero-lead" data-i18n="hero.lead">
+                    I build systems, games, and interactive experiences — from
+                    large-scale MMORPG servers to mechanic-driven prototypes.
                 </p>
                 <div class="hero-actions">
-                    <a href="#projects" class="btn btn-primary">View Projects</a>
-                    <a href="#contact" class="btn btn-ghost">Contact Me</a>
-                </div>
-            </div>
-
-            <div class="hero-card">
-                <div class="hero-card-header">
-                    <span class="hero-card-title">Adventurer Sheet</span>
-                </div>
-                <div class="hero-card-body">
-                    <div class="hero-card-row">
-                        <span class="hero-label">Role</span>
-                        <span class="hero-value">Programmer · Designer</span>
-                    </div>
-                    <div class="hero-card-row">
-                        <span class="hero-label">Focus</span>
-                        <span class="hero-value">Systems, gameplay, UX flow</span>
-                    </div>
-                    <div class="hero-card-row">
-                        <span class="hero-label">Playstyle</span>
-                        <span class="hero-value">Logical · Iterative · Player-oriented</span>
-                    </div>
+                    <a href="#work" class="btn btn-primary" data-i18n="hero.btnWork">View work</a>
+                    <a href="#contact" class="btn btn-text" data-i18n="hero.btnContact">Get in touch</a>
                 </div>
             </div>
         </section>
 
         <!-- About -->
         <section id="about" class="section">
-            <h2 class="section-title">About Me</h2>
-            <p class="section-intro">
-                I'm a programmer and designer who enjoys combining
-                system thinking, gameplay feel, and technical implementation.
-                I like building things that are logically consistent under the hood
-                and engaging to interact with.
-            </p>
-            <div class="about-grid">
-                <div class="about-block">
-                    <h3>Skills</h3>
-                    <ul>
-                        <li>Programming & architecture design</li>
-                        <li>Game / system mechanics design</li>
-                        <li>Documentation & case study writing</li>
-                    </ul>
-                </div>
-                <div class="about-block">
-                    <h3>What I Value</h3>
-                    <ul>
-                        <li>Clear logic and clean structure</li>
-                        <li>Player / user experience</li>
-                        <li>Long-term maintainability</li>
-                    </ul>
+            <p class="section-label reveal" data-i18n="about.label">About</p>
+            <div class="about reveal">
+                <p class="about-lead" data-i18n="about.lead">
+                    I'm a programmer and designer who combines system thinking,
+                    gameplay feel, and technical implementation — building things
+                    that are logically consistent under the hood and engaging to
+                    interact with.
+                </p>
+                <div class="about-cols">
+                    <div class="about-col">
+                        <h3 class="about-h" data-i18n="about.skillsH">Skills</h3>
+                        <ul class="plain-list">
+                            <li data-i18n="about.skill1">Programming &amp; architecture design</li>
+                            <li data-i18n="about.skill2">Game / system mechanics design</li>
+                            <li data-i18n="about.skill3">Documentation &amp; case-study writing</li>
+                        </ul>
+                    </div>
+                    <div class="about-col">
+                        <h3 class="about-h" data-i18n="about.valueH">What I value</h3>
+                        <ul class="plain-list">
+                            <li data-i18n="about.value1">Clear logic and clean structure</li>
+                            <li data-i18n="about.value2">Player / user experience</li>
+                            <li data-i18n="about.value3">Long-term maintainability</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Projects -->
-        <section id="projects" class="section">
-            <h2 class="section-title">Projects</h2>
-            <p class="section-intro">
-                Each project below links to a full PDF document that
-                explains the background, goals, design, and results in detail.
-            </p>
+        <!-- Work -->
+        <section id="work" class="section">
+            <p class="section-label reveal" data-i18n="work.label">Selected Work</p>
 
-            <div class="projects-grid">
-                <!-- Project 1：Witcher 3 in Minecraft -->
-                <article class="project-card">
-                    <div class="project-tag">Quest · MMO</div>
-                    <h3 class="project-title">Witcher 3 in Minecraft</h3>
-                    <p class="project-desc">
-                        An innovative MMORPG based on the original Minecraft and
-                        The Witcher 3. This is a long-term personal studio project
-                        where I act as producer, main Java programmer, and designer,
-                        leading a team of 11 people including art, programmers,
-                        designers, and marketing.
-                    </p>
-                    <ul class="project-meta">
-                        <li>Role: Producer / Java Main Programmer / Designer</li>
-                        <li>Type: Large-scale MMORPG server project</li>
-                    </ul>
-                    <a href="pdf/project-1.pdf"
-                       class="project-link"
-                       target="_blank"
-                       rel="noopener">
-                        View project PDF →
-                    </a>
-                    <!-- 嵌入 B 站播放器 -->
-                    <div class="project-video">
-                        <iframe
-                            src="https://player.bilibili.com/player.html?bvid=BV1ELY1eKEmN&autoplay=0"
-                            scrolling="no"
-                            border="0"
-                            frameborder="no"
-                            allowfullscreen="true"
-                            style="width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; margin-top: 0.75rem;"
-                        ></iframe>
+            <div class="work-list">
+                <!-- 01 Witcher 3 in Minecraft -->
+                <article class="project reveal">
+                    <div class="project-visual">
+                        <img src="assets/projects/witcher.webp"
+                             alt="Witcher 3 in Minecraft — MMORPG server key art"
+                             loading="lazy" />
+                    </div>
+                    <div class="project-grid">
+                        <aside class="project-aside">
+                            <span class="project-index">01</span>
+                            <dl class="project-meta">
+                                <dt data-i18n="meta.role">Role</dt>
+                                <dd data-i18n="p1.dd.role">Producer / Java Main Programmer / Designer</dd>
+                                <dt data-i18n="meta.team">Team</dt>
+                                <dd data-i18n="p1.dd.team">11 people — art, programming, design, marketing</dd>
+                                <dt data-i18n="meta.type">Type</dt>
+                                <dd data-i18n="p1.dd.type">Long-term personal studio project</dd>
+                            </dl>
+                        </aside>
+                        <div class="project-main">
+                            <h2 class="project-title">Witcher 3 in Minecraft</h2>
+                            <p class="project-kind" data-i18n="p1.kind">MMORPG Server</p>
+                            <p class="project-desc" data-i18n="p1.desc">
+                                An innovative MMORPG built on Minecraft and inspired by
+                                The Witcher 3 — a long-term personal studio project that
+                                I lead end to end.
+                            </p>
+
+                            <figure class="project-video">
+                                <iframe
+                                    src="https://player.bilibili.com/player.html?bvid=BV1ELY1eKEmN&autoplay=0"
+                                    scrolling="no"
+                                    frameborder="no"
+                                    allowfullscreen="true"
+                                    title="Witcher 3 in Minecraft — gameplay PV"></iframe>
+                                <figcaption data-i18n="p1.vcap">Public-test gameplay PV.</figcaption>
+                            </figure>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.design">Design &amp; Planning</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p1.design1">Designed the class &amp; skill systems for five classes — Warrior, Mage, Priest, Rogue, and Archer — each with 25+ active and passive skills.</li>
+                                    <li data-i18n="p1.design2">Designed skill-synergy mechanics and distinct build archetypes (playstyles) for every class.</li>
+                                    <li data-i18n="p1.design3">Designed boss-instance mechanics and potion / item functions, and arranged the story-driven player progression and the ordering of reward instances.</li>
+                                    <li data-i18n="p1.design4">Designed and shipped a roguelike tower-climb mode and a life-skill system (fishing) — randomized routes, reward builds, and a growth / output loop — tied into hidden instances to extend the content lifecycle.</li>
+                                </ul>
+                            </div>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.dev">Development</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p1.dev1">As main Java programmer, built the MMORPG's core systems early on: combat damage resolution and the damage-formula system, inventory and item-type storage, and a potion / item crafting and recipe system.</li>
+                                    <li data-i18n="p1.dev2">Engineered asynchronous scene &amp; instance loading, and the open-world and instance party (group) system.</li>
+                                    <li data-i18n="p1.dev3">Implemented class skill-book progression with skill-point requirements, and the logic coordinating passive-skill triggers with active-skill cast conditions.</li>
+                                    <li data-i18n="p1.dev4">Designed and implemented the late-game large-raid &amp; boss combat system — phase mechanics, skill triggers, target selection, and damage resolution — with refined combat feedback and multiplayer co-op.</li>
+                                </ul>
+                            </div>
+
+                            <div class="project-links">
+                                <a class="link" href="pdf/project-1.pdf" target="_blank" rel="noopener" data-i18n="link.pdf">Project PDF</a>
+                            </div>
+                        </div>
                     </div>
                 </article>
 
-                <!-- Project 2：Demons & Knights -->
-                <article class="project-card">
-                    <div class="project-tag">Quest · Strategy</div>
-                    <h3 class="project-title">Demons & Knights</h3>
-                    <p class="project-desc">
-                        A two-player confrontation chess game where players use cards
-                        and grid-based movement to outplay each other on their turns.
-                        Built in Unity as a school project, focusing on grid systems,
-                        unit design, and turn-based flow.
-                    </p>
-                    <ul class="project-meta">
-                        <li>Role: Designer / Unity Programmer</li>
-                        <li>Type: School Unity Project · 2-player strategy</li>
-                    </ul>
-                    <a href="pdf/Project-2.pdf"
-                       class="project-link"
-                       target="_blank"
-                       rel="noopener">
-                        View project PDF →
-                    </a>
-                    <a href="https://bean-yuan.itch.io/demosandknight"
-                       class="project-link"
-                       target="_blank"
-                       rel="noopener">
-                        Open on itch.io →
-                    </a>
-                </article>
+                <!-- 02 TurretCoop -->
+                <article class="project reveal">
+                    <div class="project-visual">
+                        <img src="assets/projects/turretcoop.webp"
+                             alt="TurretCoop — co-op tower-defense roguelike key art"
+                             loading="lazy" />
+                    </div>
+                    <div class="project-grid">
+                        <aside class="project-aside">
+                            <span class="project-index">02</span>
+                            <dl class="project-meta">
+                                <dt data-i18n="meta.role">Role</dt>
+                                <dd data-i18n="p2.dd.role">Designer / Programmer</dd>
+                                <dt data-i18n="meta.status">Status</dt>
+                                <dd data-i18n="p2.dd.status">In development</dd>
+                                <dt data-i18n="meta.genre">Genre</dt>
+                                <dd data-i18n="p2.dd.genre">Tower Defense · Co-op · Roguelike</dd>
+                            </dl>
+                        </aside>
+                        <div class="project-main">
+                            <h2 class="project-title">TurretCoop</h2>
+                            <p class="project-kind" data-i18n="p2.kind">Co-op Tower Defense · Roguelike</p>
+                            <p class="project-desc" data-i18n="p2.desc">
+                                A co-op tower-defense game with roguelike elements,
+                                currently in development. Battles play out on a field
+                                that gradually widens — and what it widens into is
+                                never the same twice. (TurretCoop is a working title.)
+                            </p>
 
-                <!-- Project 3：Flux -->
-                <article class="project-card">
-                    <div class="project-tag">Quest · Platformer</div>
-                    <h3 class="project-title">Flux</h3>
-                    <p class="project-desc">
-                        A 2D side-scrolling jump-through mobile game, where players
-                        can control the character to travel to any past time and
-                        transform space. School Unity Project.
-                    </p>
-                    <ul class="project-meta">
-                        <li>Role: Designer / Unity Programmer</li>
-                        <li>Type: School Unity Project · Mobile 2D side-scroller</li>
-                    </ul>
-                    <a href="pdf/Project-3.pdf"
-                       class="project-link"
-                       target="_blank"
-                       rel="noopener">
-                        View project PDF →
-                    </a>
-                    <a href="https://bean-yuan.itch.io/flux"
-                       class="project-link"
-                       target="_blank"
-                       rel="noopener">
-                        Open on itch.io →
-                    </a>
-                </article>
+                            <figure class="project-gallery">
+                                <img src="assets/projects/turretcoop-shot-1.webp"
+                                     alt="TurretCoop — tower defending against a wave of enemies"
+                                     loading="lazy" />
+                                <img src="assets/projects/turretcoop-shot-2.webp"
+                                     alt="TurretCoop — modular tower part selection: base, body, top"
+                                     loading="lazy" />
+                                <img src="assets/projects/turretcoop-shot-3.webp"
+                                     alt="TurretCoop — roguelike upgrade selection screen"
+                                     loading="lazy" />
+                                <img src="assets/projects/turretcoop-shot-4.webp"
+                                     alt="TurretCoop — building placement on the expanding battlefield"
+                                     loading="lazy" />
+                                <figcaption data-i18n="p2.gcap">In-development prototype — combat, modular tower parts, the roguelike upgrade screen, and building placement on the expanding battlefield.</figcaption>
+                            </figure>
 
-                <!-- Project 4：Three Bulky Bears（Steam 项目，无 PDF） -->
-                <article class="project-card">
-                    <div class="project-tag">Quest · Platformer</div>
-                    <h3 class="project-title">Three Bulky Bears</h3>
-                    <p class="project-desc">
-                        A cute but challenging 2D platformer where players switch
-                        between Baby Bear, Mama Bear, and Papa Bear to roll, jump,
-                        swim, and smash through handcrafted levels. Released on Steam
-                        as a school Unity project.
-                    </p>
-                    <ul class="project-meta">
-                        <li>Role: Unity Programmer</li>
-                        <li>Platform: Steam (PC)</li>
-                    </ul>
-                    <div class="project-links">
-                        <a href="https://store.steampowered.com/app/2957270/Three_Bulky_Bears/"
-                           class="project-link"
-                           target="_blank"
-                           rel="noopener">
-                            View on Steam →
-                        </a>
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.design">Design &amp; Planning</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p2.design1">Expanding battlefield — instead of a fixed map, the combat field widens as a run progresses.</li>
+                                    <li data-i18n="p2.design2">Each new section is drawn from different module types, reshuffling layout and pacing for roguelike variety.</li>
+                                    <li data-i18n="p2.design3">Modular towers — defenses are split into base, body, and top attack module, so players freely assemble their own towers.</li>
+                                </ul>
+                            </div>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.dev">Development</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p2.dev1">Wave Function Collapse (WFC) drives procedural terrain generation.</li>
+                                    <li data-i18n="p2.dev2">Part-based tower system — base / body / top modules combine into player-built towers.</li>
+                                </ul>
+                            </div>
+
+                            <div class="project-links">
+                                <span class="link-note" data-i18n="note.inDev">In development</span>
+                            </div>
+                        </div>
                     </div>
                 </article>
 
-                <!-- Project 5：DeckBuilder -->
-                <article class="project-card">
-                    <div class="project-tag">Quest · Roguelike</div>
-                    <h3 class="project-title">DeckBuilder</h3>
-                    <p class="project-desc">
-                        A 2D top-down open-world prototype where players explore, collect randomized cards, and
-                        fight monsters through a deckbuilding combat loop.
-                    </p>
-                    <ul class="project-meta">
-                        <li>Role: Unity Programmer</li>
-                        <li>Type: School Project · System-driven combat</li>
-                    </ul>
-                    <div class="project-links">
-                        <span class="project-soon">Case study coming soon</span>
+                <!-- 03 Demons & Knights -->
+                <article class="project reveal">
+                    <div class="project-visual">
+                        <img src="assets/projects/demons-knights.webp"
+                             alt="Demons &amp; Knights — grid-based strategy board"
+                             loading="lazy" />
+                    </div>
+                    <div class="project-grid">
+                        <aside class="project-aside">
+                            <span class="project-index">03</span>
+                            <dl class="project-meta">
+                                <dt data-i18n="meta.role">Role</dt>
+                                <dd data-i18n="p3.dd.role">Designer / Unity Programmer</dd>
+                                <dt data-i18n="meta.format">Format</dt>
+                                <dd data-i18n="p3.dd.format">2-player · Turn-based</dd>
+                                <dt data-i18n="meta.type">Type</dt>
+                                <dd data-i18n="p3.dd.type">School Unity project</dd>
+                            </dl>
+                        </aside>
+                        <div class="project-main">
+                            <h2 class="project-title">Demons &amp; Knights</h2>
+                            <p class="project-kind" data-i18n="p3.kind">Turn-based Strategy</p>
+                            <p class="project-desc" data-i18n="p3.desc">
+                                A two-player confrontation game where players use cards
+                                and grid-based movement to outplay each other turn by
+                                turn.
+                            </p>
+
+                            <figure class="project-figure">
+                                <img src="assets/projects/demons-knights-rules.webp"
+                                     alt="Demons &amp; Knights — annotated board showing knights, demons, the demon castle, barriers, traps, lava, bridges, and item chests"
+                                     loading="lazy" />
+                                <figcaption data-i18n="p3.fcap">Board elements — knights, the demon castle, barriers, traps, lava, bridges, and item chests.</figcaption>
+                            </figure>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.design">Design &amp; Planning</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p3.design1">Grid, unit, and card design.</li>
+                                    <li data-i18n="p3.design2">Turn-based combat flow and balancing.</li>
+                                </ul>
+                            </div>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.dev">Development</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p3.dev1">Unity implementation of the board, units, and card logic.</li>
+                                </ul>
+                            </div>
+
+                            <div class="project-links">
+                                <a class="link" href="pdf/project-2.pdf" target="_blank" rel="noopener" data-i18n="link.pdf">Project PDF</a>
+                                <a class="link" href="https://bean-yuan.itch.io/demosandknight" target="_blank" rel="noopener">itch.io</a>
+                            </div>
+                        </div>
                     </div>
                 </article>
 
-                <!-- Project 6：Mutant -->
-                <article class="project-card">
-                    <div class="project-tag">Quest · Level Design</div>
-                    <h3 class="project-title">Mutant</h3>
-                    <p class="project-desc">
-                        A 2D side-scrolling prototype where a slime can mimic other monsters to gain abilities and
-                        progress through levels.
-                    </p>
-                    <ul class="project-meta">
-                        <li>Role: Level Designer / Unity Programmer</li>
-                        <li>Type: Prototype · Mechanic-first design</li>
-                    </ul>
-                    <div class="project-links">
-                        <span class="project-soon">Case study coming soon</span>
+                <!-- 04 Flux -->
+                <article class="project reveal">
+                    <div class="project-visual">
+                        <img src="assets/projects/flux.webp"
+                             alt="Flux — 2D side-scrolling platformer scene"
+                             loading="lazy" />
+                    </div>
+                    <div class="project-grid">
+                        <aside class="project-aside">
+                            <span class="project-index">04</span>
+                            <dl class="project-meta">
+                                <dt data-i18n="meta.role">Role</dt>
+                                <dd data-i18n="p4.dd.role">Designer / Unity Programmer</dd>
+                                <dt data-i18n="meta.platform">Platform</dt>
+                                <dd data-i18n="p4.dd.platform">Mobile · 2D side-scroller</dd>
+                                <dt data-i18n="meta.type">Type</dt>
+                                <dd data-i18n="p4.dd.type">School Unity project</dd>
+                            </dl>
+                        </aside>
+                        <div class="project-main">
+                            <h2 class="project-title">Flux</h2>
+                            <p class="project-kind" data-i18n="p4.kind">2D Platformer</p>
+                            <p class="project-desc" data-i18n="p4.desc">
+                                A 2D side-scrolling mobile game where the player travels
+                                to any past moment and reshapes space to progress
+                                through each level.
+                            </p>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.design">Design &amp; Planning</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p4.design1">Time-travel / space-transform mechanic design.</li>
+                                    <li data-i18n="p4.design2">Level design for the mobile side-scroller.</li>
+                                </ul>
+                            </div>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.dev">Development</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p4.dev1">Unity implementation of movement and the time/space mechanic.</li>
+                                </ul>
+                            </div>
+
+                            <div class="project-links">
+                                <a class="link" href="pdf/project-3.pdf" target="_blank" rel="noopener" data-i18n="link.pdf">Project PDF</a>
+                                <a class="link" href="https://bean-yuan.itch.io/flux" target="_blank" rel="noopener">itch.io</a>
+                            </div>
+                        </div>
                     </div>
                 </article>
 
-                <!-- Project 7：Scrollscape -->
-                <article class="project-card">
-                    <div class="project-tag">Quest · Exploration</div>
-                    <h3 class="project-title">Scrollscape</h3>
-                    <p class="project-desc">
-                        An open-ended, galaxy-style exploration project built in Unity. I focused on gameplay modules,
-                        systems design, and rapid iteration to deliver a playable vertical slice.
-                    </p>
-                    <ul class="project-meta">
-                        <li>Role: Unity Developer / Systems Designer</li>
-                        <li>Type: Team Project · 16 scenes</li>
-                    </ul>
-                    <div class="project-links">
-                        <span class="project-soon">Case study coming soon</span>
+                <!-- 05 Scrollscape -->
+                <article class="project reveal">
+                    <div class="project-visual">
+                        <img src="assets/projects/scrollscape.webp"
+                             alt="Scrollscape — pixel-art browser puzzle platformer"
+                             loading="lazy" />
+                    </div>
+                    <div class="project-grid">
+                        <aside class="project-aside">
+                            <span class="project-index">05</span>
+                            <dl class="project-meta">
+                                <dt data-i18n="meta.role">Role</dt>
+                                <dd data-i18n="p5.dd.role">Unity Developer / Systems Designer</dd>
+                                <dt data-i18n="meta.scope">Scope</dt>
+                                <dd data-i18n="p5.dd.scope">Team project · 16 scenes</dd>
+                            </dl>
+                        </aside>
+                        <div class="project-main">
+                            <h2 class="project-title">Scrollscape</h2>
+                            <p class="project-kind" data-i18n="p5.kind">Exploration</p>
+                            <p class="project-desc" data-i18n="p5.desc">
+                                An open-ended, galaxy-style exploration project built in
+                                Unity, shipped as a playable vertical slice.
+                            </p>
+
+                            <figure class="project-video">
+                                <iframe
+                                    src="https://www.youtube-nocookie.com/embed/fwDkzHSa_UM"
+                                    title="Scrollscape — gameplay video"
+                                    loading="lazy"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen></iframe>
+                                <figcaption data-i18n="p5.vcap">Gameplay video.</figcaption>
+                            </figure>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.design">Design &amp; Planning</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p5.design1">Systems design for exploration and gameplay modules.</li>
+                                </ul>
+                            </div>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.dev">Development</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p5.dev1">Unity development across gameplay modules.</li>
+                                    <li data-i18n="p5.dev2">Rapid iteration on a 16-scene vertical slice.</li>
+                                </ul>
+                            </div>
+
+                            <div class="project-links">
+                                <a class="link" href="https://pepeko.itch.io/scrollscape" target="_blank" rel="noopener">itch.io</a>
+                                <span class="link-note" data-i18n="note.caseStudy">Case study in progress</span>
+                            </div>
+                        </div>
                     </div>
                 </article>
 
-                <!-- Project 8：Research / VR Experiment -->
-                <article class="project-card">
-                    <div class="project-tag">Quest · Research</div>
-                    <h3 class="project-title">VR Ball Localization &amp; Grasping Experiment</h3>
-                    <p class="project-desc">
-                        Designed and implemented a VR experimental paradigm to measure localization precision and
-                        sensorimotor integration, with robust trial randomization and data logging.
-                    </p>
-                    <ul class="project-meta">
-                        <li>Role: Experiment Designer / Unity Developer</li>
-                        <li>Focus: Data logging, experimental flow, metrics</li>
-                    </ul>
-                    <div class="project-links">
-                        <span class="project-soon">Write-up coming soon</span>
+                <!-- 06 VR Experiment -->
+                <article class="project reveal">
+                    <div class="project-visual">
+                        <img src="assets/projects/vr.webp"
+                             alt="VR Ball Localization &amp; Grasping Accuracy Experiment — title card"
+                             loading="lazy" />
+                    </div>
+                    <div class="project-grid">
+                        <aside class="project-aside">
+                            <span class="project-index">06</span>
+                            <dl class="project-meta">
+                                <dt data-i18n="meta.role">Role</dt>
+                                <dd data-i18n="p6.dd.role">Experiment Designer / Unity Developer</dd>
+                                <dt data-i18n="meta.advisor">Advisor</dt>
+                                <dd data-i18n="p6.dd.advisor">Prof. Wallace Lages</dd>
+                                <dt data-i18n="meta.focus">Focus</dt>
+                                <dd data-i18n="p6.dd.focus">Experimental paradigm · Data pipeline</dd>
+                            </dl>
+                        </aside>
+                        <div class="project-main">
+                            <h2 class="project-title" data-i18n="p6.title">VR Ball Localization &amp; Grasping Accuracy Experiment</h2>
+                            <p class="project-kind" data-i18n="p6.kind">Research — Proprioception &amp; Sensorimotor Integration</p>
+                            <p class="project-desc" data-i18n="p6.desc">
+                                Designed and developed under Professor Wallace Lages — a
+                                VR-based ball-localization and grasping experimental
+                                paradigm that quantifies the localization precision and
+                                error bounds of proprioception and sensorimotor
+                                integration.
+                            </p>
+
+                            <figure class="vr-gallery">
+                                <img src="assets/projects/vr-shot-1.webp"
+                                     alt="VR experiment — arcane calibration step, marking spatial bounds with the staff"
+                                     loading="lazy" />
+                                <img src="assets/projects/vr-shot-2.webp"
+                                     alt="VR experiment — rune-core localization task, locking a core's coordinates"
+                                     loading="lazy" />
+                                <img class="vr-report" src="assets/projects/vr-shot-3.webp"
+                                     alt="VR experiment — end-of-session performance report with per-core lock and recall accuracy"
+                                     loading="lazy" />
+                                <figcaption data-i18n="p6.gcap">VR training prototype — arcane calibration, the rune-core lock task, and the end-of-session performance report.</figcaption>
+                            </figure>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.design">Design &amp; Planning</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p6.design1">Defined the experimental paradigm — how each trial localizes and grasps a target ball under controlled conditions.</li>
+                                    <li data-i18n="p6.design2">Independent variables: target-ball position (x / y / z), distance, viewing angle (yaw / pitch), and feedback on/off.</li>
+                                    <li data-i18n="p6.design3">Dependent measures: hit deviation, angular error, reaction time, and success rate.</li>
+                                </ul>
+                            </div>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.dev">Development</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p6.dev1">Built the full interaction flow in Unity, with trial randomization across conditions.</li>
+                                    <li data-i18n="p6.dev2">Implemented per-trial data logging and export to feed downstream statistical analysis.</li>
+                                    <li data-i18n="p6.dev3">Delivered a stable platform supporting repeated runs and fast experiment iteration.</li>
+                                </ul>
+                            </div>
+
+                            <div class="project-links">
+                                <span class="link-note" data-i18n="note.writeup">Write-up in progress</span>
+                            </div>
+                        </div>
                     </div>
                 </article>
             </div>
@@ -302,56 +458,40 @@
 
         <!-- Contact -->
         <section id="contact" class="section">
-            <h2 class="section-title">Contact</h2>
-            <p class="section-intro">
-                If you'd like to talk about projects, collaboration,
-                or anything related to programming and design, feel free to reach out.
-            </p>
-
-            <div class="contact-grid">
-                <div class="contact-block">
-                    <h3>Email</h3>
-                    <a href="mailto:w1192171903@gmail.com" class="contact-link">
-                        w1192171903@gmail.com
-                    </a>
-                </div>
-                <div class="contact-block">
-                    <h3>Links</h3>
-                    <ul>
-                        <li>
-                            <a href="https://github.com/BeanYuan"
-                               class="contact-link"
-                               target="_blank"
-                               rel="noopener">
-                                GitHub · BeanYuan
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://bean-yuan.itch.io/"
-                               class="contact-link"
-                               target="_blank"
-                               rel="noopener">
-                                Itch.io · Bean_Yuan
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://www.linkedin.com/in/lizhuoyuan-wan-4a0943382/"
-                               class="contact-link"
-                               target="_blank"
-                               rel="noopener">
-                                LinkedIn · Lizhuoyuan Wan
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <p class="section-label reveal" data-i18n="contact.label">Contact</p>
+            <div class="contact reveal">
+                <p class="contact-lead" data-i18n="contact.lead">
+                    If you'd like to talk about projects, collaboration, or anything
+                    around programming and design — reach out.
+                </p>
+                <ul class="contact-links">
+                    <li>
+                        <span class="contact-k" data-i18n="contact.kEmail">Email</span>
+                        <a class="link" href="mailto:w1192171903@gmail.com">w1192171903@gmail.com</a>
+                    </li>
+                    <li>
+                        <span class="contact-k">GitHub</span>
+                        <a class="link" href="https://github.com/BeanYuan" target="_blank" rel="noopener">github.com/BeanYuan</a>
+                    </li>
+                    <li>
+                        <span class="contact-k">itch.io</span>
+                        <a class="link" href="https://bean-yuan.itch.io/" target="_blank" rel="noopener">bean-yuan.itch.io</a>
+                    </li>
+                    <li>
+                        <span class="contact-k">LinkedIn</span>
+                        <a class="link" href="https://www.linkedin.com/in/lizhuoyuan-wan-4a0943382/" target="_blank" rel="noopener">Lizhuoyuan Wan</a>
+                    </li>
+                </ul>
             </div>
         </section>
     </main>
 
     <footer class="site-footer">
-        <p>© <span id="year"></span> Lizhuoyuan Wan · Crafted for adventures.</p>
+        <span>© <span id="year"></span> Lizhuoyuan Wan</span>
+        <span data-i18n="footer.role">Programmer &amp; Game Designer</span>
     </footer>
 
     <script src="main.js"></script>
+    <script src="i18n.js"></script>
 </body>
 </html>
