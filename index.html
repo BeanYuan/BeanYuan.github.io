@@ -76,6 +76,9 @@
                         </ul>
                     </div>
                 </div>
+                <div class="about-extra">
+                    <button type="button" class="modal-trigger" data-modal-open="games" data-i18n="about.gamesBtn">Gaming experience →</button>
+                </div>
             </div>
         </section>
 
@@ -490,6 +493,150 @@
         <span>© <span id="year"></span> Lizhuoyuan Wan</span>
         <span data-i18n="footer.role">Programmer &amp; Game Designer</span>
     </footer>
+
+    <!-- Games modal -->
+    <div class="modal" id="games" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="games-title">
+        <div class="modal-backdrop"></div>
+        <div class="modal-panel" role="document">
+            <header class="modal-head">
+                <h2 class="modal-title" id="games-title" data-i18n="modal.gamesTitle">Gaming Experience</h2>
+                <button class="modal-close" type="button" aria-label="Close">×</button>
+            </header>
+            <p class="modal-intro" data-i18n="modal.gamesIntro">Hundreds of titles across many genres — a partial reference list. Hours noted where significant.</p>
+            <div class="modal-body">
+                <!-- English -->
+                <div class="lang-en">
+                    <div class="games-grid">
+                        <div>
+                            <h3 class="games-cat-h">Competitive</h3>
+                            <p class="games-list">League of Legends <span class="hrs">(2000h+)</span>, CrossFire <span class="hrs">(2000h+)</span>, CS:GO <span class="hrs">(1000h+)</span>, Valorant <span class="hrs">(800h+)</span>, Overwatch, Apex Legends, Rainbow Six Siege, For Honor, Counter-Strike 2, Counter-Strike, Counter-Strike: Condition Zero, Delta Force, Naraka: Bladepoint, PUBG: BATTLEGROUNDS, Insurgency: Sandstorm, Heroes &amp; Generals, HYPERCHARGE: Unboxed, Pavlov VR, Battlerite, 大冲锋.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">MMORPG</h3>
+                            <p class="games-list">Albion Online, Warframe, World of Warcraft, 剑网3, 古剑奇谭, Destiny 2, Throne and Liberty, The First Descendant, STALCRAFT: X.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">Survival &amp; Crafting</h3>
+                            <p class="games-list">ARK: Survival Ascended <span class="hrs">(300h+)</span>, Rust <span class="hrs">(300h+)</span>, ARK: Survival Evolved, Terraria, Stardew Valley, Don't Starve, Don't Starve Together, Subnautica: Below Zero, Sons of the Forest, Project Zomboid, 7 Days to Die, Enshrouded, Necesse, Raft, ICARUS, Deep Rock Galactic, Lethal Company, Conan Exiles, Generation Zero, Miscreated, Hurtworld, Abiotic Factor, Luma Island, Feed and Grow: Fish, tModLoader, Meadow.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">AAA Titles</h3>
+                            <p class="games-list">The Witcher 3: Wild Hunt <span class="hrs">(200h+, studied deeply for development techniques)</span>, Red Dead Redemption 2, Elden Ring, Horizon Zero Dawn, Stellar Blade, Clair Obscur: Expedition 33, Hogwarts Legacy, DOOM Eternal, Monster Hunter: World, NieR: Automata, DARK SOULS III, Death Stranding 2, The Last of Us Part II Remastered, Grand Theft Auto V (Legacy &amp; Enhanced), Rise of the Tomb Raider, Shadow of the Tomb Raider, Sid Meier's Civilization VI, Granblue Fantasy: Relink, Atomic Heart, Ghost Recon Wildlands, Half-Life: Alyx, Resident Evil Requiem, Pragmata, 生灵重塑.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">Puzzle</h3>
+                            <p class="games-list">Chants of Sennaar, INSIDE, Braid, Monument Valley, Moss, Portal 2, Getting Over It with Bennett Foddy, Mountain.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">Rhythm</h3>
+                            <p class="games-list">Bits &amp; Bops, Beat Saber.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">Narrative</h3>
+                            <p class="games-list">Beyond: Two Souls, Detroit: Become Human, Life is Strange, Little Nightmares, Little Nightmares Enhanced, Little Nightmares III, Murders on the Yangtze, Stray, Neva, Drop Alive, Angeldust, Mandragora, Alabaster Dawn, Wanderburg, Chinese Parents, Unheard, Tricolour Lovestory, 沉没意志, 同舟共济, 如胶似漆.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">ARPG</h3>
+                            <p class="games-list">No Rest for the Wicked, Hades, Remnant II, Heroes of Might &amp; Magic: Olden Era, The Scroll of Taiwu, Kingdom Come: Deliverance II, 奇唤士, Bless Unleashed, Split Fiction, Lost Castle, Relic Hunters Legend, 四兄弟:最终版.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">Co-op</h3>
+                            <p class="games-list">Goose Goose Duck, Pummel Party, Castle Crashers, Operation Tango, Overcooked, Tabletop Simulator, Lovers in a Dangerous Spacetime, PEAK, Chained Together, Left 4 Dead 2, Sea of Thieves, 划划划.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">2D Side-scrollers</h3>
+                            <p class="games-list">Hollow Knight, Hollow Knight: Silksong, Cuphead, Ori and the Will of the Wisps, Dead Cells, Undertale, Darksiders II Deathinitive Edition, BattleBlock Theater, Door Kickers: Action Squad, 绝对魔权.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">Tower Defense</h3>
+                            <p class="games-list">Orcs Must Die! 3, Thronefall, Tower Dominion, Dome Keeper, 绝境北地.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">Roguelike</h3>
+                            <p class="games-list">Cult of the Lamb, Slay the Spire, Slay the Spire 2, The Escapists 2, Drakantos, 梦之形.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">Strategy / Board</h3>
+                            <p class="games-list">Age of Empires II: Definitive Edition, Command &amp; Conquer: Red Alert 3, 80 Days, 棋弈无限:围棋.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">Simulation &amp; Casual</h3>
+                            <p class="games-list">Hand Simulator, Wednesdays, Minecraft Legends, Portal Knights, Pure Badminton, Aimlabs, Comedy Night, Rick and Morty: Virtual Rick-ality, Carry The Glass, Kiki.</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">Horror &amp; Thriller</h3>
+                            <p class="games-list">Depth, KEEP OUT, GTFO, The Outlast Trials.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chinese -->
+                <div class="lang-zh">
+                    <div class="games-grid">
+                        <div>
+                            <h3 class="games-cat-h">竞技</h3>
+                            <p class="games-list">英雄联盟 <span class="hrs">(2000h+)</span>、CF <span class="hrs">(2000h+)</span>、CSGO <span class="hrs">(1000h+)</span>、瓦罗兰特 <span class="hrs">(800h+)</span>、守望先锋、Apex Legends、彩虹六号:围攻、荣耀战魂、CS 2、Counter-Strike、Counter-Strike: Condition Zero、三角洲行动、永劫无间、PUBG: BATTLEGROUNDS、Insurgency: Sandstorm、Heroes &amp; Generals、HYPERCHARGE: Unboxed、Pavlov VR、Battlerite、大冲锋。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">MMORPG</h3>
+                            <p class="games-list">阿尔比恩 Online、Warframe 星际战甲、魔兽世界、剑网3、古剑奇谭、命运2、Throne and Liberty、The First Descendant、STALCRAFT: X。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">生存建造</h3>
+                            <p class="games-list">方舟:生存飞升 <span class="hrs">(300h+)</span>、Rust 腐蚀 <span class="hrs">(300h+)</span>、方舟:生存进化、泰拉瑞亚、星露谷物语、饥荒、饥荒联机版、深海迷航:冰点之下、Sons of the Forest、Project Zomboid、七日杀、雾锁王国 Enshrouded、奈斯启示录 Necesse、Raft、ICARUS 翼星求生、深岩银河、Lethal Company、Conan Exiles、Generation Zero、Miscreated、Hurtworld 伤害世界、非生物因素、露玛岛、Feed and Grow: Fish、tModLoader、Meadow。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">3A</h3>
+                            <p class="games-list">巫师 3:狂猎 <span class="hrs">(200h+ — 深度游玩并学习研究开发技术)</span>、荒野大镖客 2、艾尔登法环、地平线:零之曙光、剑星、光与影:33号远征队、霍格沃兹之遗、DOOM Eternal、Monster Hunter: World、NieR:Automata、DARK SOULS III、Death Stranding 2、The Last of Us Part II Remastered、Grand Theft Auto V (传承版 &amp; 增强版)、Rise of the Tomb Raider、Shadow of the Tomb Raider、Sid Meier's Civilization VI、Granblue Fantasy: Relink、原子之心、幽灵行动:荒野、Half-Life: Alyx、Resident Evil Requiem、Pragmata、生灵重塑。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">解密</h3>
+                            <p class="games-list">巴别塔圣歌、INSIDE、Braid、Monument Valley、Moss、Portal 2、Getting Over It with Bennett Foddy、Mountain。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">音乐节奏</h3>
+                            <p class="games-list">啵点节奏 Bits &amp; Bops、Beat Saber。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">剧情</h3>
+                            <p class="games-list">超凡双生、底特律:化身为人、Life is Strange、Little Nightmares、小小梦魇 强化版、小小梦魇 3、山河旅探、Stray、Neva、Drop Alive、Angeldust、Mandragora、Alabaster Dawn、Wanderburg、中国式家长、疑案追声、Tricolour Lovestory、沉没意志、同舟共济、如胶似漆。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">ARPG</h3>
+                            <p class="games-list">恶意不息、Hades、遗迹 2、魔法门之英雄无敌:上古纪元、太吾绘卷、天国:拯救2、奇唤士、神佑释放、双影奇境、Lost Castle、遗物猎人传说、四兄弟:最终版。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">合作</h3>
+                            <p class="games-list">Goose Goose Duck、Pummel Party、Castle Crashers、Operation Tango、Overcooked、Tabletop Simulator、Lovers in a Dangerous Spacetime、PEAK、Chained Together、Left 4 Dead 2、Sea of Thieves、划划划。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">横版 2D</h3>
+                            <p class="games-list">Hollow Knight、Hollow Knight: Silksong、Cuphead、Ori and the Will of the Wisps、Dead Cells、Undertale、Darksiders II Deathinitive Edition、BattleBlock Theater、破门而入:行动小队、绝对魔权。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">塔防</h3>
+                            <p class="games-list">Orcs Must Die! 3、Thronefall、Tower Dominion、Dome Keeper 穹顶守护者、绝境北地。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">肉鸽</h3>
+                            <p class="games-list">咩咩启示录、Slay the Spire、Slay the Spire 2、The Escapists 2、Drakantos、梦之形。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">棋牌策略</h3>
+                            <p class="games-list">Age of Empires II: Definitive Edition、命令与征服:红色警戒3、80 Days、棋弈无限:围棋。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">模拟/休闲</h3>
+                            <p class="games-list">Hand Simulator、Wednesdays、Minecraft Legends、Portal Knights、Pure Badminton、Aimlabs、Comedy Night、Rick and Morty: Virtual Rick-ality、Carry The Glass、Kiki。</p>
+                        </div>
+                        <div>
+                            <h3 class="games-cat-h">恐怖/惊悚</h3>
+                            <p class="games-list">深海惊魂 Depth、KEEP OUT、GTFO、The Outlast Trials。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="main.js"></script>
     <script src="i18n.js"></script>

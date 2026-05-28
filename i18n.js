@@ -49,6 +49,14 @@
         "about.value1": { en: "Clear logic and clean structure", zh: "清晰的逻辑与整洁的结构" },
         "about.value2": { en: "Player / user experience", zh: "玩家 / 用户体验" },
         "about.value3": { en: "Long-term maintainability", zh: "长期可维护性" },
+        "about.gamesBtn": { en: "Gaming experience →", zh: "游戏经历 →" },
+
+        // games modal
+        "modal.gamesTitle": { en: "Gaming Experience", zh: "游戏经历" },
+        "modal.gamesIntro": {
+            en: "Hundreds of titles across many genres — a partial reference list. Hours noted where significant.",
+            zh: "数百款游戏、多种品类——以下是一份大致清单，时长显著的会标注。"
+        },
 
         // work section
         "work.label": { en: "Selected Work", zh: "精选作品" },

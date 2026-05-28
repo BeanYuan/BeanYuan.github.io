@@ -90,3 +90,36 @@ if (canObserve && revealEls.length) {
 } else {
     revealAll();
 }
+
+// =========================
+// Modal (games experience)
+// =========================
+function openModal(id) {
+    const m = document.getElementById(id);
+    if (!m) return;
+    m.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+}
+
+function closeAllModals() {
+    document.querySelectorAll('.modal[aria-hidden="false"]').forEach((m) => {
+        m.setAttribute("aria-hidden", "true");
+    });
+    document.body.classList.remove("modal-open");
+}
+
+document.addEventListener("click", (e) => {
+    const trigger = e.target.closest && e.target.closest("[data-modal-open]");
+    if (trigger) {
+        e.preventDefault();
+        openModal(trigger.getAttribute("data-modal-open"));
+        return;
+    }
+    if (e.target.closest && e.target.closest(".modal-close, .modal-backdrop")) {
+        closeAllModals();
+    }
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeAllModals();
+});
