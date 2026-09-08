@@ -61,6 +61,34 @@
         // work section
         "work.label": { en: "Selected Work", zh: "精选作品" },
 
+        // p0 Hush — VALORANT agent concept
+        "p0.kind": { en: "Sound Initiator · Design Spec", zh: "声音先锋 · 设计方案" },
+        "p0.dd.role": { en: "Game Designer (solo)", zh: "游戏策划（独立完成）" },
+        "p0.dd.format": { en: "Interactive spec · EN / 中文 · 3D ability demos", zh: "交互式方案 · 中英双语 · 3D 技能演示" },
+        "p0.dd.type": { en: "VALORANT agent concept (fan design, 2026)", zh: "VALORANT 特工概念（同人设计，2026）" },
+        "p0.desc": {
+            en: "A VALORANT Initiator built around sound as an information layer: relay real sounds elsewhere, tag movement through walls, silence footsteps, and sweep a site with a moving scan. Written as a design spec with a live 3D demo of every ability.",
+            zh: "以声音为信息层的 VALORANT 先锋：把真实声音搬到别处、穿墙标记移动、消掉脚步、用移动扫描扫过整个点。以设计方案形式呈现，每个技能配实时 3D 演示。"
+        },
+        "p0.gcap": { en: "Concept art and frames from the interactive demo: Echo Relay, Sounding, Requiem.", zh: "概念原画与交互演示截帧：回声中继、声探、安魂曲。" },
+        "p0.design1": {
+            en: "C · Echo Relay: a dormant, invisible beacon that, once activated, replays every sound near Hush at its own position for 12 s, then bursts to deafen and concuss.",
+            zh: "C · 回声中继：休眠隐形的信标，激活后 12 秒内在自身位置回放 Hush 周围的一切声音，到期爆发致聋并震荡。"
+        },
+        "p0.design2": {
+            en: "Q · Sounding: a 70° sector wave through walls; anyone tagged is Resonant for 5 s and drops a snapshot marker whenever they move.",
+            zh: "Q · 声探：70° 穿墙扇形声波；被挂上的敌人 5 秒内一动就留快照标记。"
+        },
+        "p0.design3": {
+            en: "E · Muffle: a stim-style beacon; allies who step in get 8 s of silent footsteps that persist after leaving the field.",
+            zh: "E · 消声：加速盘式信标；踩入的队友获得 8 秒无声脚步，离开范围后仍然持续。"
+        },
+        "p0.design4": {
+            en: "X · Requiem: a 12 m disc that advances 30 m through walls, painting a ripple for every enemy movement inside it.",
+            zh: "X · 安魂曲：12 米圆盘穿墙推进 30 米，盘内敌人每一次移动都冒涟漪。"
+        },
+        "p0.link": { en: "Open the interactive spec", zh: "打开交互式方案" },
+
         // shared — detail headings
         "detail.design": { en: "Design & Planning", zh: "策划与设计" },
         "detail.dev": { en: "Development", zh: "开发" },
