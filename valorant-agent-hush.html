@@ -845,9 +845,11 @@
   }
   var initial='en';
   try{
+    // priority: URL hash (set by the portfolio site) > portfolio site language > this page's own choice > browser
+    var site=localStorage.getItem('lizhuoyuan_lang');
     var saved=localStorage.getItem(KEY);
-    if(saved==='en'||saved==='zh'){ initial=saved; }
-    else if(location.hash==='#zh'){ initial='zh'; }
+    if(site==='en'||site==='zh'){ initial=site; }
+    else if(saved==='en'||saved==='zh'){ initial=saved; }
     else if((navigator.language||'').toLowerCase().indexOf('zh')===0){ initial='zh'; }
   }catch(e){}
   if(location.hash==='#zh') initial='zh';

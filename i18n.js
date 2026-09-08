@@ -358,6 +358,12 @@
             document.title = I18N["doc.title"][lang];
         }
 
+        // sub-pages that carry their own EN/ZH toggle follow the site language via the URL hash
+        var subLinks = document.querySelectorAll('a[href^="valorant-agent-hush.html"]');
+        for (var k = 0; k < subLinks.length; k++) {
+            subLinks[k].setAttribute("href", "valorant-agent-hush.html#" + lang);
+        }
+
         var toggle = document.querySelector(".lang-toggle");
         if (toggle) {
             toggle.textContent = lang === "zh" ? "EN" : "中文";
