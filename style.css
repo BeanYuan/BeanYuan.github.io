@@ -857,3 +857,211 @@ html[lang="zh-CN"] .lang-en { display: none; }
         transform: none;
     }
 }
+
+
+/* ---------- Work dashboard ---------- */
+.work-dash { margin-bottom: clamp(3rem, 6vw, 5rem); }
+
+.dash-hint {
+    color: var(--text-muted);
+    max-width: 44rem;
+    margin-bottom: 1.4rem;
+}
+
+.dash-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.6rem;
+}
+
+.dash-filters button {
+    font: inherit;
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: border-color 0.18s ease, color 0.18s ease;
+}
+
+.dash-filters button:hover { color: var(--text); }
+.dash-filters button.is-active { border-color: var(--text); color: var(--text); }
+
+.dash-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+}
+
+.dash-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.35s var(--ease);
+}
+
+.dash-card:hover,
+.dash-card:focus-visible {
+    border-color: var(--line-strong);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.dash-card.is-hidden { display: none; }
+
+.dash-thumb {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel);
+}
+
+.dash-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease);
+}
+
+.dash-card:hover .dash-thumb img { transform: scale(1.04); }
+
+.dash-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    flex: 1;
+    padding: 1rem 1.1rem 1rem;
+}
+
+.dash-head {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+}
+
+.dash-index {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text-faint);
+    flex: none;
+}
+
+.dash-card .project-title {
+    font-size: 1.12rem;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.dash-card .project-kind {
+    margin: 0;
+    font-size: 0.7rem;
+}
+
+.dash-meta {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.2rem 0.75rem;
+    margin: 0.2rem 0 0;
+    font-size: 0.8rem;
+}
+
+.dash-meta dt {
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    padding-top: 0.2rem;
+}
+
+.dash-meta dd { color: var(--text); }
+
+.dash-card .project-desc {
+    margin: 0.2rem 0 0;
+    font-size: 0.86rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.dash-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+
+.dash-tag {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.18rem 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--text-muted);
+}
+
+.dash-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    align-items: center;
+    padding: 0.75rem 1.1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.8rem;
+}
+
+.dash-details {
+    margin-left: auto;
+    font: inherit;
+    font-size: 0.8rem;
+    background: none;
+    border: 0;
+    color: var(--text);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--line-strong);
+}
+
+.dash-details:hover { text-decoration-color: var(--text); }
+
+/* detail region: hidden until a card is opened */
+.work-detail { display: none; }
+.work-detail.is-open { display: block; }
+
+.work-back {
+    font: inherit;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--text-muted);
+    padding: 0.5rem 0.9rem;
+    cursor: pointer;
+    margin-bottom: 2.4rem;
+    transition: border-color 0.18s ease, color 0.18s ease;
+}
+
+.work-back:hover { color: var(--text); border-color: var(--text); }
+
+.work-list .project { display: none; }
+.work-list.has-open .project.is-open { display: flex; }
+
+@media (max-width: 980px) {
+    .dash-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+    .dash-grid { grid-template-columns: 1fr; }
+}

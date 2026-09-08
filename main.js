@@ -53,6 +53,134 @@ document.querySelectorAll(".nav a").forEach((link) => {
 });
 
 // =========================
+// Work dashboard (overview grid built from the detail articles)
+// =========================
+(function buildDash() {
+    const list = document.querySelector(".work-list");
+    const grid = document.getElementById("dash-grid");
+    const detail = document.getElementById("work-detail");
+    const back = document.querySelector(".work-back");
+    if (!list || !grid || !detail || !back) return;
+
+    const articles = Array.from(list.querySelectorAll("article.project"));
+
+    function el(tag, cls, text) {
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (text != null) e.textContent = text;
+        return e;
+    }
+
+    function openProject(i) {
+        articles.forEach((a, k) => a.classList.toggle("is-open", k === i));
+        articles[i].classList.add("in");
+        list.classList.add("has-open");
+        detail.classList.add("is-open");
+        detail.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    articles.forEach((art, i) => {
+        const tags = (art.dataset.tags || "").split(",").filter(Boolean);
+        const card = el("article", "dash-card");
+        card.tabIndex = 0;
+        card.setAttribute("role", "button");
+        card.dataset.tags = tags.join(",");
+
+        const thumb = el("div", "dash-thumb");
+        const img = art.querySelector(".project-visual img");
+        if (img) {
+            const im = document.createElement("img");
+            im.src = img.getAttribute("src");
+            im.alt = img.getAttribute("alt") || "";
+            im.loading = "lazy";
+            thumb.appendChild(im);
+        }
+        card.appendChild(thumb);
+
+        const body = el("div", "dash-body");
+        const head = el("div", "dash-head");
+        const idx = art.querySelector(".project-index");
+        head.appendChild(el("span", "dash-index", idx ? idx.textContent.trim() : ""));
+        const title = art.querySelector(".project-title");
+        if (title) head.appendChild(title.cloneNode(true));
+        body.appendChild(head);
+
+        const kind = art.querySelector(".project-kind");
+        if (kind) body.appendChild(kind.cloneNode(true));
+
+        const meta = art.querySelector(".project-meta");
+        if (meta) {
+            const dl = el("dl", "dash-meta");
+            const dts = meta.querySelectorAll("dt");
+            const dds = meta.querySelectorAll("dd");
+            for (let k = 0; k < Math.min(3, dts.length, dds.length); k++) {
+                dl.appendChild(dts[k].cloneNode(true));
+                dl.appendChild(dds[k].cloneNode(true));
+            }
+            body.appendChild(dl);
+        }
+
+        const desc = art.querySelector(".project-desc");
+        if (desc) body.appendChild(desc.cloneNode(true));
+
+        if (tags.length) {
+            const tg = el("div", "dash-tags");
+            tags.forEach((t) => {
+                const s = el("span", "dash-tag", t);
+                s.setAttribute("data-i18n", "tag." + t);
+                tg.appendChild(s);
+            });
+            body.appendChild(tg);
+        }
+        card.appendChild(body);
+
+        const foot = el("div", "dash-foot");
+        const links = art.querySelector(".project-links");
+        if (links) {
+            Array.from(links.children).forEach((c) => {
+                const cl = c.cloneNode(true);
+                cl.addEventListener("click", (e) => e.stopPropagation());
+                foot.appendChild(cl);
+            });
+        }
+        const btn = el("button", "dash-details", "Full case \u2192");
+        btn.type = "button";
+        btn.setAttribute("data-i18n", "dash.details");
+        foot.appendChild(btn);
+        card.appendChild(foot);
+
+        card.addEventListener("click", () => openProject(i));
+        card.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openProject(i);
+            }
+        });
+        grid.appendChild(card);
+    });
+
+    back.addEventListener("click", () => {
+        detail.classList.remove("is-open");
+        list.classList.remove("has-open");
+        articles.forEach((a) => a.classList.remove("is-open"));
+        const work = document.getElementById("work");
+        if (work) work.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.querySelectorAll(".dash-filters button").forEach((b) => {
+        b.addEventListener("click", () => {
+            document.querySelectorAll(".dash-filters button").forEach((x) => x.classList.remove("is-active"));
+            b.classList.add("is-active");
+            const f = b.dataset.filter;
+            grid.querySelectorAll(".dash-card").forEach((c) => {
+                const has = (c.dataset.tags || "").split(",").indexOf(f) >= 0;
+                c.classList.toggle("is-hidden", f !== "all" && !has);
+            });
+        });
+    });
+})();
+
+// =========================
 // Scroll reveal
 // =========================
 const revealEls = document.querySelectorAll(".reveal");

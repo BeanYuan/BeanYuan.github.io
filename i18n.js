@@ -60,6 +60,22 @@
 
         // work section
         "work.label": { en: "Selected Work", zh: "精选作品" },
+        "work.hint": { en: "Overview of all projects. Filter by discipline or status, open a card for the full case.", zh: "所有项目一览。按方向或状态筛选，点开卡片查看完整内容。" },
+        "filter.all": { en: "All", zh: "全部" },
+        "filter.design": { en: "Design", zh: "策划设计" },
+        "filter.programming": { en: "Programming", zh: "程序" },
+        "filter.research": { en: "Research", zh: "研究" },
+        "filter.shipped": { en: "Shipped", zh: "已发布" },
+        "filter.indev": { en: "In development", zh: "开发中" },
+        "filter.concept": { en: "Concept", zh: "概念方案" },
+        "tag.design": { en: "Design", zh: "策划设计" },
+        "tag.programming": { en: "Programming", zh: "程序" },
+        "tag.research": { en: "Research", zh: "研究" },
+        "tag.shipped": { en: "Shipped", zh: "已发布" },
+        "tag.indev": { en: "In development", zh: "开发中" },
+        "tag.concept": { en: "Concept", zh: "概念方案" },
+        "dash.details": { en: "Full case →", zh: "完整内容 →" },
+        "dash.back": { en: "← Back to overview", zh: "← 返回总览" },
 
         // p0 Hush — VALORANT agent concept
         "p0.kind": { en: "Sound Initiator · Design Spec", zh: "声音先锋 · 设计方案" },
