@@ -1,0 +1,831 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loom-Warden Encounter</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+  /* Single dark theme by choice: the page follows the look of WoW wiki and guide sites. Every colour is painted explicitly. */
+  :root{
+    --page:#0c0b0a; --panel:#191816; --panel-2:#211f1b; --line:#37322a; --gold-line:#7d6230;
+    --ink:#e4dfd6; --muted:#a69f92; --faint:#766f62; --white:#ffffff;
+    --gold:#f0c35f; --link:#80b2ff; --crimson:#d9433b;
+    --tank:#8fb3e8; --heal:#66c47d; --dps:#d8ccb4; --warn:#f0b93a; --kick:#6aa6ff; --magic:#b390f6;
+    /* names read by the 3D replay engine */
+    --ground:#101010; --rule-2:#4a4236; --thread:#f0c35f; --thread-ink:#1a1206; --rule:#2a2620;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--page);color:var(--ink);font-family:"Open Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:15px;line-height:1.6}
+  [data-lang]{display:none}
+  body[data-show="en"] [data-lang="en"],body[data-show="zh"] [data-lang="zh"]{display:inline}
+  a{color:var(--link)}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+  /* site bar */
+  .site{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:7px 20px;background:#050505;border-bottom:1px solid #2a251e}
+  .wordmark{font-weight:700;font-size:14px;color:var(--gold);text-decoration:none;letter-spacing:.01em}
+  .wordmark span{color:var(--muted);font-weight:400;margin-left:6px}
+  .siteR{display:flex;align-items:center;gap:14px;font-size:13px}
+  .siteR a{color:var(--muted);text-decoration:none} .siteR a:hover{color:var(--white)}
+  .lang{display:flex}
+  .lang button{font:600 12px/1 "Open Sans","Noto Sans SC",sans-serif;background:#16140f;color:var(--muted);border:1px solid #3a3226;padding:6px 10px;cursor:pointer;margin-left:-1px}
+  .lang button[aria-pressed="true"]{background:#2a2215;color:var(--gold);border-color:var(--gold-line);position:relative;z-index:1}
+
+  .shell{display:grid;grid-template-columns:214px minmax(0,1fr);gap:16px;max-width:1240px;margin:14px auto 60px;padding:0 16px}
+
+  /* left sidebar: wiki navigation boxes */
+  .side{position:sticky;top:50px;align-self:start;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 62px);overflow:auto}
+  .nbox{border:1px solid var(--gold-line);background:#14120e;border-radius:3px}
+  .nbox h4{margin:0;padding:5px 10px;font-size:13.5px;font-weight:600;color:var(--gold);border-bottom:1px solid #2f281c}
+  .nbox ul{list-style:none;margin:0;padding:5px 0 7px}
+  .nbox a,.opt{display:flex;align-items:center;gap:8px;width:100%;padding:3px 12px;font:13.5px/1.5 "Open Sans","Noto Sans SC",sans-serif;color:var(--link);text-decoration:none;background:none;border:0;text-align:left;cursor:pointer}
+  .nbox a:hover{text-decoration:underline}
+  .nbox a[aria-current="true"]{color:var(--white);font-weight:600}
+  .opt{color:var(--ink)}
+  .opt:hover{background:#1f1b14}
+  .opt[aria-pressed="true"]{color:var(--white);font-weight:600;background:#262015}
+  .radio{width:10px;height:10px;border-radius:50%;border:1px solid var(--muted);flex:none}
+  .opt[aria-pressed="true"] .radio{background:var(--gold);border-color:var(--gold)}
+  .ico{width:15px;height:15px;flex:none}
+  .c-tank{color:var(--tank)} .c-heal{color:var(--heal)} .c-dps{color:var(--dps)}
+
+  /* article */
+  .article{background:var(--panel);border:1px solid var(--line);padding:16px 26px 36px;min-width:0}
+  .crumbs{font-size:12.5px;color:var(--muted);margin:0 0 8px}
+  .crumbs a{color:var(--gold);text-decoration:none} .crumbs a:hover{text-decoration:underline}
+  .crumbs .sep{margin:0 6px;color:var(--faint)}
+  h1.title{font-size:30px;font-weight:400;line-height:1.25;color:var(--white);margin:0;padding-bottom:6px;border-bottom:1px solid var(--line);text-wrap:balance}
+  .byline{font-size:12.5px;color:var(--muted);margin:6px 0 16px}
+  .byline b{color:var(--gold);font-weight:600}
+  p{margin:0 0 12px}
+  .lead b{color:var(--white)}
+  h2{font-size:23px;font-weight:400;color:var(--white);margin:26px 0 10px;padding-bottom:4px;border-bottom:1px solid var(--line);scroll-margin-top:58px}
+  h3{font-size:16px;font-weight:700;color:var(--white);margin:16px 0 4px;display:flex;align-items:center;gap:7px;scroll-margin-top:58px}
+  h3 .ico{width:16px;height:16px}
+
+  /* infobox */
+  .infobox{float:right;width:300px;margin:2px 0 16px 22px;background:var(--panel-2);border:1px solid var(--line);font-size:13.5px}
+  .ib-head{display:flex;align-items:center;justify-content:center;gap:8px;padding:7px 10px;background:#2a2215;border-bottom:1px solid var(--gold-line);color:var(--white);font-weight:600;text-align:center}
+  .ib-media{padding:10px 10px 8px;border-bottom:1px solid var(--line)}
+  .ib-cap{font-size:12.5px;font-style:italic;color:var(--muted);margin:6px 0 8px;text-align:center}
+  dl.ib-rows{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;padding:9px 11px}
+  dl.ib-rows dt{font-weight:600;color:var(--ink)}
+  dl.ib-rows dd{margin:0}
+  .ib-foot{padding:5px 10px;background:#2a2215;border-top:1px solid var(--gold-line);color:var(--white);font-weight:600;font-size:13px;text-align:center}
+
+  /* pattern lock inside the infobox */
+  .grid6{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;background:#0b0a09;padding:5px;border:1px solid #3a3226}
+  .tile{appearance:none;aspect-ratio:1;background:#262219;border:1px solid #3c3528;border-radius:1px;padding:0;cursor:pointer;position:relative}
+  .tile:disabled{cursor:default}
+  .tile.lit,.tile.ok{background:#c9982f;border-color:#f0c35f;background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.18) 0 2px,transparent 2px 6px)}
+  .tile.picked{box-shadow:inset 0 0 0 2px var(--gold)}
+  .tile.bad{background:#b3322b;border-color:#e0584f}
+  .tile.bad::after{content:"×";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font:700 16px/1 "Open Sans",sans-serif}
+  .tile.miss{background:transparent;outline:2px dashed var(--gold);outline-offset:-4px}
+  .pbar{height:4px;background:#2c271e;margin:6px 0 6px;overflow:hidden}
+  .pbar i{display:block;height:100%;width:100%;background:var(--gold);transform-origin:left center}
+  .pstatus{font-size:13px;min-height:2.9em;margin:0 0 7px;color:var(--ink);text-align:center}
+  .pbtns{display:flex;gap:6px;justify-content:center}
+  .wbtn{font:600 12.5px/1 "Open Sans","Noto Sans SC",sans-serif;padding:7px 14px;cursor:pointer;color:#f7e6bf;background:linear-gradient(#8a1b14,#5a0f0b);border:1px solid #c79a45;border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
+  .wbtn:hover{background:linear-gradient(#a3231b,#6b120d)}
+  .wbtn.ghost{background:#1b1812;color:var(--ink);border-color:#4a4032}
+
+  /* table of contents */
+  .toc{display:inline-block;background:var(--panel-2);border:1px solid var(--line);padding:8px 16px 10px 14px;margin:2px 0 14px;font-size:13.5px}
+  .toc-title{text-align:center;font-weight:700;color:var(--white);margin-bottom:4px}
+  .toc-title button{font:400 12px "Open Sans",sans-serif;color:var(--link);background:none;border:0;cursor:pointer;padding:0 2px}
+  .toc ol{list-style:none;margin:0;padding:0}
+  .toc ol ol{padding-left:18px}
+  .toc li{margin:1px 0}
+  .toc .num{color:var(--muted);margin-right:6px;font-variant-numeric:tabular-nums}
+  .toc a{text-decoration:none} .toc a:hover{text-decoration:underline}
+
+  .ag{font-style:italic}
+
+  /* role groups and ability lists */
+  .rolegrp{transition:opacity .15s}
+  .rolegrp.dim,.ab.dim{opacity:.32}
+  ul.wl{margin:0 0 10px;padding-left:22px}
+  ul.wl li{margin:4px 0;line-height:1.65}
+  ul.wl ul{padding-left:22px;margin:4px 0 2px}
+  .sref,.sname{color:var(--gold);font-weight:600;text-decoration:none}
+  .sref:hover,.sname:hover{text-decoration:underline}
+  .spell{white-space:nowrap}
+  .sico{display:inline-grid;place-items:center;width:18px;height:18px;margin-right:5px;border-radius:2px;font:700 10.5px/1 "Open Sans",sans-serif;font-style:normal;color:#fff;vertical-align:-3px;text-shadow:0 1px 0 #000;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2),0 0 0 1px #000}
+  .sico.gold{background:linear-gradient(135deg,#c08e32,#4a3010)} .sico.red{background:linear-gradient(135deg,#bd3a2f,#4a0f0c)}
+  .sico.blue{background:linear-gradient(135deg,#4274c6,#14254a)} .sico.steel{background:linear-gradient(135deg,#8d929b,#2e3137)}
+  .flg{width:15px;height:15px;vertical-align:-3px;margin-left:3px}
+  .flg.warn{color:var(--warn)} .flg.skull{color:#ece7df} .flg.tank{color:var(--tank)} .flg.heal{color:var(--heal)} .flg.dps{color:var(--dps)} .flg.kick{color:var(--kick)} .flg.magic{color:var(--magic)}
+  .stagehead{font-weight:700;color:var(--white);margin:14px 0 2px;scroll-margin-top:58px}
+  .stagehead .hp{font-weight:400;color:var(--muted);font-size:13.5px;margin-left:6px}
+  .diffTag{font-size:12.5px;font-style:italic;color:var(--muted);margin-left:5px}
+  li.absent{opacity:.42} li.absent>.diffTag{color:#ff8a80}
+  .flaglegend{display:flex;flex-wrap:wrap;gap:3px 16px;font-size:12.5px;color:var(--muted);margin:0 0 8px}
+  .diffnote{font-size:13.5px;color:var(--muted)}
+  .dv{font-variant-numeric:tabular-nums;color:var(--white);font-weight:600}
+  .clearR{clear:right}
+
+  /* Wowhead-style tabbed cheat sheet */
+  .cheat{border:1px solid #33302b;background:#141312;margin-top:8px}
+  .tabs{display:flex;flex-wrap:wrap;background:#1b1a18;border-bottom:1px solid #33302b}
+  .tab{font:600 14px/1.2 "Open Sans","Noto Sans SC",sans-serif;background:none;color:var(--muted);border:0;border-bottom:3px solid transparent;padding:11px 15px 9px;cursor:pointer}
+  .tab:hover{color:var(--white)}
+  .tab[aria-selected="true"]{color:var(--white);background:#232120;border-bottom-color:var(--crimson)}
+  .tabpanel{padding:14px 16px 16px}
+  .bossframe{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-bottom:8px}
+  .bname{font-weight:700;color:var(--white);font-size:14px}
+  .hpbar{height:14px;background:#000;border:1px solid #6b5630;border-radius:2px;overflow:hidden}
+  .hpbar i{display:block;height:100%;width:100%;background:linear-gradient(#e2453b,#8e1b15)}
+  .hpval{font-size:13px;color:var(--white);font-variant-numeric:tabular-nums;min-width:3.4em;text-align:right}
+  .stage{position:relative;aspect-ratio:16/9;background:#101010;border:1px solid #2a2722;cursor:grab;touch-action:none;user-select:none}
+  .stage:active{cursor:grabbing}
+  .stage canvas{display:block;width:100%;height:100%}
+  .labels{position:absolute;inset:0;pointer-events:none}
+  .vl{position:absolute;transform:translate(-50%,-100%);font:600 11px/1.3 "Open Sans","Noto Sans SC",sans-serif;color:#fff;background:rgba(10,9,8,.82);border:1px solid #4a4032;padding:1px 6px;white-space:nowrap;text-shadow:0 1px 0 #000}
+  .rphase{display:block;color:var(--gold);font-weight:600;font-size:13.5px;margin:9px 0 2px}
+  .rcap{margin:0 0 8px;font-size:14.5px;max-width:82ch}
+  .legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12.5px;color:var(--muted)}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+
+  /* timeline inside the cheat sheet */
+  .tlscroll{overflow-x:auto}
+  .tlinner{min-width:820px}
+  .phaserow{position:relative;height:40px;margin-bottom:2px}
+  .phbtn{position:absolute;top:0;height:36px;background:#1b1a18;border:1px solid #33302b;border-bottom:3px solid #3f3a32;color:var(--ink);text-align:left;padding:2px 7px;cursor:pointer;overflow:hidden;font:600 13px/1.25 "Open Sans","Noto Sans SC",sans-serif;white-space:nowrap;text-overflow:ellipsis}
+  .phbtn small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+  .phbtn[aria-pressed="true"]{border-bottom-color:var(--crimson);background:#232120}
+  #tl svg{display:block;width:100%;height:auto}
+  #tl .band{fill:transparent} #tl .band.b2{fill:rgba(255,255,255,.025)} #tl .band.sel{fill:rgba(240,195,95,.1)}
+  #tl .grid{stroke:#2c2923;stroke-width:1}
+  #tl .axis{fill:var(--faint);font:11px "Open Sans",sans-serif}
+  #tl .tlabel{fill:var(--ink);font:13px "Open Sans","Noto Sans SC",sans-serif}
+  #tl .lane{stroke:#2c2923;stroke-width:1}
+  #tl .tank .tick{fill:var(--tank)} #tl .dps .tick{fill:var(--dps)} #tl .heal .tick{fill:var(--heal)}
+  #tl .thread .tick,#tl .thread .blk{fill:var(--gold)} #tl .crimson .tick,#tl .crimson .blk{fill:var(--crimson)}
+  #tl .blk.rot{stroke:#fff;stroke-width:1.2}
+  #tl .rotlbl{fill:#1a1206;font:700 11px "Open Sans",sans-serif}
+  #tl .mark{fill:var(--muted);font:11px "Open Sans","Noto Sans SC",sans-serif}
+  #tl .track.dim{opacity:.2}
+  #tl .bzline{stroke:var(--crimson);stroke-width:2;stroke-dasharray:4 3} #tl .bztext{fill:#ff8a80;font:600 11px "Open Sans","Noto Sans SC",sans-serif}
+  .tllegend{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:12.5px;color:var(--muted);margin-top:8px}
+  .tllegend svg{width:22px;height:14px;vertical-align:-2px;margin-right:6px}
+
+  footer{margin-top:30px;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:var(--faint)}
+  footer a{color:var(--muted)}
+
+  body.shot .site,body.shot .side{display:none!important}
+  body.shot .article>*:not(.cheat){display:none!important}
+  body.shot .cheat>*:not(.tabpanel){display:none!important}
+  body.shot #replayBlock>*:not(.stage){display:none!important}
+  body.shot #timelineBlock{display:none!important}
+  body.shot .shell{display:block;max-width:none;margin:0;padding:0}
+  body.shot .article,body.shot .cheat{padding:0;border:0;margin:0}
+  body.shot .tabpanel{padding:0}
+  body.shot .stage{aspect-ratio:auto;height:100vh;width:100vw;border:0}
+
+  @media (max-width:980px){
+    .shell{grid-template-columns:1fr}
+    .side{position:static;max-height:none;flex-direction:row;flex-wrap:wrap}
+    .nbox{flex:1 1 200px}
+  }
+  @media (max-width:720px){
+    .infobox{float:none;width:auto;margin:0 0 16px}
+    .article{padding:14px 14px 30px}
+    .vl{font-size:10px} .stage{aspect-ratio:4/3}
+  }
+  @media (prefers-reduced-motion: reduce){ .rolegrp{transition:none} }
+
+  /* ===== texture skin: surfaces below are image assets, see assets/loom/CREDITS.txt ===== */
+  body{background:#0b0a09 url(assets/loom/bg-leather.jpg) repeat}
+  .site{background:#060505 url(assets/loom/bg-leather.jpg) repeat;border-bottom:0}
+  .site::after{content:"";position:absolute;left:12px;right:12px;bottom:-9px;height:18px;background:url(assets/loom/divider-cap.png) right bottom/24px 18px no-repeat,url(assets/loom/divider-line.png) left bottom/calc(100% - 22px) 18px no-repeat;pointer-events:none}
+  .article{background:#141210 url(assets/loom/panel-leather.jpg) repeat;border:16px solid transparent;border-image:url(assets/loom/frame-gold.png) 32 stretch}
+  h1.title{border-bottom:0;padding-bottom:18px;background:url(assets/loom/divider-cap.png) right bottom/24px 18px no-repeat,url(assets/loom/divider-line.png) left bottom/calc(100% - 22px) 18px no-repeat}
+  h2{border-bottom:0;padding-bottom:16px;background:url(assets/loom/divider-cap.png) right bottom/24px 18px no-repeat,url(assets/loom/divider-line.png) left bottom/calc(100% - 22px) 18px no-repeat}
+  .nbox{background:#12100c url(assets/loom/panel-leather.jpg);border:10px solid transparent;border-image:url(assets/loom/frame-gold-thin.png) 16 stretch;border-radius:0}
+  .nbox h4{border-bottom:0;padding-bottom:14px;background:url(assets/loom/divider-cap.png) right bottom/24px 18px no-repeat,url(assets/loom/divider-line.png) left bottom/calc(100% - 22px) 18px no-repeat}
+  .opt{border:0 solid transparent}
+  .opt[aria-pressed="true"]{background:none;border-image:url(assets/loom/button-dark.png) 14 18 fill / 7px 10px stretch}
+  .radio{width:14px;height:14px;border:0;border-radius:0;background:url(assets/loom/radio-off.png) center/contain no-repeat}
+  .opt[aria-pressed="true"] .radio{background:url(assets/loom/radio-on.png) center/contain no-repeat;border:0}
+  .ico{width:16px;height:16px}
+  h3 .ico{width:18px;height:18px}
+  .infobox{background:#16140f url(assets/loom/panel-leather.jpg);border:16px solid transparent;border-image:url(assets/loom/frame-gold.png) 32 stretch}
+  .ib-head{border-bottom:0;padding-bottom:18px;background:url(assets/loom/divider-cap.png) right bottom/24px 18px no-repeat,url(assets/loom/divider-line.png) left bottom/calc(100% - 22px) 18px no-repeat,url(assets/loom/bg-leather.jpg)}
+  .ib-foot{border-top:0;padding-top:18px;background:url(assets/loom/divider-cap.png) right top/24px 18px no-repeat,url(assets/loom/divider-line.png) left top/calc(100% - 22px) 18px no-repeat,url(assets/loom/bg-leather.jpg)}
+  .ib-media{border-bottom:0;padding-bottom:18px;background:url(assets/loom/divider-cap.png) right bottom/24px 18px no-repeat,url(assets/loom/divider-line.png) left bottom/calc(100% - 22px) 18px no-repeat}
+  .toc{background:#16140f url(assets/loom/panel-leather.jpg);border:10px solid transparent;border-image:url(assets/loom/frame-gold-thin.png) 16 stretch}
+  .sico{width:20px;height:20px;display:inline-block;vertical-align:-5px;margin-right:6px;border-radius:0;box-shadow:none;background:none}
+  .flg{width:16px;height:16px;vertical-align:-3px;margin-left:3px}
+  .flaglegend .flg{margin-left:0}
+  .grid6{background:#0b0a09;border:10px solid transparent;border-image:url(assets/loom/frame-gold-thin.png) 16 stretch;padding:2px}
+  .tile{background-color:#262219;border:0;box-shadow:none;outline:0}
+  .tile,.tile.picked,.tile.bad{background-image:url(assets/loom/tiles-stone-sheet.jpg)}
+  .tile.lit,.tile.ok,.tile.miss,.tile.lit.picked{background-image:url(assets/loom/tiles-gold-sheet.jpg)}
+  .tile,.tile.lit,.tile.ok,.tile.picked,.tile.bad,.tile.miss,.tile.lit.picked{background-size:400% 200%;background-position:var(--sx,0%) var(--sy,0%);background-repeat:no-repeat;border:0;box-shadow:none}
+  .tile.picked::after{content:"";position:absolute;inset:22%;background:url(assets/loom/radio-on.png) center/contain no-repeat}
+  .tile.bad::after{content:"";position:absolute;inset:14%;background:url(assets/loom/flag-skull.png) center/contain no-repeat}
+  .tile.miss{opacity:.42;outline:0}
+  .pbar{height:18px;overflow:visible;background:none;margin:9px 0 7px;border-style:solid;border-color:transparent;border-width:0 9px;border-image:url(assets/loom/bar-back.png) 0 9 fill / 0 9px stretch}
+  .pbar i{height:18px;margin:0 -9px;width:calc(100% + 18px);background:none;box-sizing:border-box;border-style:solid;border-color:transparent;border-width:0 9px;border-image:url(assets/loom/bar-red.png) 0 9 fill / 0 9px stretch}
+  .hpbar{height:18px;overflow:visible;background:none;border-radius:0;border-style:solid;border-color:transparent;border-width:0 9px;border-image:url(assets/loom/bar-back.png) 0 9 fill / 0 9px stretch}
+  .hpbar i{height:18px;margin-left:-9px;min-width:18px;background:none;box-sizing:border-box;border-style:solid;border-color:transparent;border-width:0 9px;border-image:url(assets/loom/bar-red.png) 0 9 fill / 0 9px stretch}
+  .wbtn{background:none;height:38px;padding:0 20px;border-radius:0;box-shadow:none;color:#fbe9c2;text-shadow:0 1px 0 #000;border:0 solid transparent;border-image:url(assets/loom/button-red.png) 14 18 fill / 10px 14px stretch}
+  .wbtn:hover{background:none;filter:brightness(1.12)}
+  .wbtn:active{border-image:url(assets/loom/button-red-pressed.png) 14 18 fill / 10px 14px stretch}
+  .wbtn.ghost{background:none;color:#ece2cc;border-image:url(assets/loom/button-dark.png) 14 18 fill / 10px 14px stretch}
+  .lang button{background:none;border:0 solid transparent;margin-left:3px;padding:7px 12px;border-image:url(assets/loom/button-dark.png) 14 18 fill / 6px 9px stretch}
+  .lang button[aria-pressed="true"]{background:none;color:#fff;border-image:url(assets/loom/button-red.png) 14 18 fill / 6px 9px stretch}
+  .cheat{background:#121110 url(assets/loom/panel-leather.jpg);border:14px solid transparent;border-image:url(assets/loom/frame-gold-thin.png) 16 stretch}
+  .tabs{background:url(assets/loom/bg-leather.jpg);border-bottom:0;padding:6px 6px 0;gap:4px}
+  .tab{background:none;border:0 solid transparent;padding:10px 18px;border-image:url(assets/loom/button-dark.png) 14 18 fill / 9px 12px stretch}
+  .tab[aria-selected="true"]{background:none;color:#fff;border-image:url(assets/loom/button-red.png) 14 18 fill / 9px 12px stretch}
+  .phbtn{background:none;border:0 solid transparent;border-image:url(assets/loom/button-dark.png) 14 18 fill / 8px 11px stretch}
+  .phbtn[aria-pressed="true"]{background:none;border-image:url(assets/loom/button-red.png) 14 18 fill / 8px 11px stretch}
+  .phbtn[aria-pressed="true"] small{color:#f6dcb0}
+  .stage{border:10px solid transparent;border-image:url(assets/loom/frame-gold-thin.png) 16 stretch;background:#0c0b0a}
+  body.shot .stage{border:0}
+</style>
+
+<header class="site">
+  <a class="wordmark" href="https://beanyuan.github.io/">Lizhuoyuan Wan<span><span data-lang="en">Encounter concepts</span><span data-lang="zh">遭遇战概念</span></span></a>
+  <div class="siteR">
+    <a href="https://beanyuan.github.io/"><span data-lang="en">Portfolio</span><span data-lang="zh">作品集</span></a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-set="en" aria-pressed="true">EN</button>
+      <button type="button" data-set="zh" aria-pressed="false">中文</button>
+    </div>
+  </div>
+</header>
+<script>
+(function(){ var KEY='loom-lang', init='en';
+  try{ var site=localStorage.getItem('lizhuoyuan_lang'), saved=localStorage.getItem(KEY);
+    if(site==='en'||site==='zh') init=site; else if(saved==='en'||saved==='zh') init=saved; else if((navigator.language||'').toLowerCase().indexOf('zh')===0) init='zh'; }catch(e){}
+  if(location.hash==='#zh') init='zh'; if(location.hash==='#en') init='en';
+  document.body.setAttribute('data-show',init); })();
+</script>
+
+<div class="shell">
+<aside class="side" aria-label="Page tools">
+  <nav class="nbox" aria-label="Guide contents">
+    <h4><span data-lang="en">Guide contents</span><span data-lang="zh">攻略目录</span></h4>
+    <ul>
+      <li><a href="#adventure" data-sec="adventure"><span data-lang="en">Adventure Guide</span><span data-lang="zh">冒险指南</span></a></li>
+      <li><a href="#overview" data-sec="overview"><span data-lang="en">Overview</span><span data-lang="zh">概览</span></a></li>
+      <li><a href="#abilities" data-sec="abilities"><span data-lang="en">Abilities</span><span data-lang="zh">技能</span></a></li>
+      <li><a href="#cheatsheet" data-sec="cheatsheet"><span data-lang="en">Mechanics cheat sheet</span><span data-lang="zh">机制速查</span></a></li>
+    </ul>
+  </nav>
+  <div class="nbox" role="group" aria-label="Difficulty">
+    <h4><span data-lang="en">Difficulty</span><span data-lang="zh">难度</span></h4>
+    <ul>
+      <li><button type="button" class="opt" data-diff="n" aria-pressed="false"><span class="radio"></span><span data-lang="en">Normal</span><span data-lang="zh">普通</span></button></li>
+      <li><button type="button" class="opt" data-diff="h" aria-pressed="false"><span class="radio"></span><span data-lang="en">Heroic</span><span data-lang="zh">英雄</span></button></li>
+      <li><button type="button" class="opt" data-diff="m" aria-pressed="true"><span class="radio"></span><span data-lang="en">Mythic</span><span data-lang="zh">史诗</span></button></li>
+    </ul>
+  </div>
+  <div class="nbox" role="group" aria-label="Role">
+    <h4><span data-lang="en">Highlight role</span><span data-lang="zh">突出职责</span></h4>
+    <ul>
+      <li><button type="button" class="opt" data-role="all" aria-pressed="true"><span class="radio"></span><span data-lang="en">All roles</span><span data-lang="zh">全部职责</span></button></li>
+      <li><button type="button" class="opt" data-role="tank" aria-pressed="false"><img class="ico" src="assets/loom/flag-tank.png" alt="" width="16" height="16"><span data-lang="en">Tanks</span><span data-lang="zh">坦克</span></button></li>
+      <li><button type="button" class="opt" data-role="heal" aria-pressed="false"><img class="ico" src="assets/loom/flag-heal.png" alt="" width="16" height="16"><span data-lang="en">Healers</span><span data-lang="zh">治疗</span></button></li>
+      <li><button type="button" class="opt" data-role="dps" aria-pressed="false"><img class="ico" src="assets/loom/flag-dps.png" alt="" width="16" height="16"><span data-lang="en">Damage Dealers</span><span data-lang="zh">输出</span></button></li>
+    </ul>
+  </div>
+</aside>
+
+<main class="article">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="https://beanyuan.github.io/"><span data-lang="en">Portfolio</span><span data-lang="zh">作品集</span></a><span class="sep">›</span><span data-lang="en">Encounter concepts</span><span data-lang="zh">遭遇战概念</span><span class="sep">›</span><span data-lang="en">The Unwoven Hall</span><span data-lang="zh">未织之厅</span></nav>
+  <h1 class="title"><span data-lang="en">Vael'thar, the Loom-Warden</span><span data-lang="zh">织机守卫维尔萨</span></h1>
+  <div class="byline"><span data-lang="en">By <b>Lizhuoyuan Wan</b> · Updated 2026-09-13 · World of Warcraft raid boss concept</span><span data-lang="zh">作者 <b>万李卓圜</b> · 更新于 2026-09-13 · 魔兽世界团本首领概念</span></div>
+
+  <aside class="infobox" aria-label="Encounter summary">
+    <div class="ib-head"><span data-lang="en">Vael'thar, the Loom-Warden</span><span data-lang="zh">织机守卫维尔萨</span></div>
+    <div class="ib-media">
+      <div class="grid6" id="grid6"></div>
+      <div class="pbar" aria-hidden="true"><i id="pbarFill"></i></div>
+      <p class="pstatus" id="pstatus" aria-live="polite"></p>
+      <div class="pbtns">
+        <button type="button" class="wbtn" id="pStart">Start pull</button>
+        <button type="button" class="wbtn ghost" id="pTighten" hidden>Tighten now</button>
+      </div>
+      <p class="ib-cap"><span data-lang="en">Pattern Lock from above. Shown <span class="dv" data-n="the whole cast" data-h="6 s" data-m="4 s">4 s</span>, hidden <span class="dv" data-n="never" data-h="4 s" data-m="6 s">6 s</span>.</span><span data-lang="zh">俯视的图案锁定。显示 <span class="dv" data-n="全程" data-h="6 秒" data-m="4 秒">4 秒</span>，隐藏 <span class="dv" data-n="无" data-h="4 秒" data-m="6 秒">6 秒</span>。</span></p>
+    </div>
+    <dl class="ib-rows">
+      <dt><span data-lang="en">Type</span><span data-lang="zh">类型</span></dt><dd><span data-lang="en">Raid boss</span><span data-lang="zh">团本首领</span></dd>
+      <dt><span data-lang="en">Location</span><span data-lang="zh">位置</span></dt><dd><span data-lang="en">The Unwoven Hall</span><span data-lang="zh">未织之厅</span></dd>
+      <dt><span data-lang="en">Raid size</span><span data-lang="zh">人数</span></dt><dd><span data-lang="en"><span class="dv" data-n="10–30, flexible" data-h="10–30, flexible" data-m="20, fixed">20, fixed</span></span><span data-lang="zh"><span class="dv" data-n="10–30 弹性" data-h="10–30 弹性" data-m="20 固定">20 固定</span></span></dd>
+      <dt><span data-lang="en">Stages</span><span data-lang="zh">阶段</span></dt><dd><span data-lang="en">3 and an intermission</span><span data-lang="zh">3 个加 1 个过渡</span></dd>
+      <dt><span data-lang="en">Berserk</span><span data-lang="zh">狂暴</span></dt><dd><span class="dv" data-n="12:00" data-h="10:00" data-m="9:00">9:00</span></dd>
+      <dt><span data-lang="en">Target kill</span><span data-lang="zh">目标击杀</span></dt><dd><span data-lang="en">about 8:30</span><span data-lang="zh">约 8:30</span></dd>
+      <dt><span data-lang="en">Signature</span><span data-lang="zh">标志机制</span></dt><dd><a class="sref" href="#ab-pl"><span data-lang="en">Pattern Lock</span><span data-lang="zh">图案锁定</span></a></dd>
+    </dl>
+    <div class="ib-foot"><span data-lang="en">The Unwoven Hall</span><span data-lang="zh">未织之厅</span></div>
+  </aside>
+
+  <p class="lead"><span data-lang="en"><b>Vael'thar, the Loom-Warden</b> is a raid boss concept built around one mechanic, <a class="sref" href="#ab-pl">Pattern Lock</a>: the floor shows the raid a pattern, hides it, and resolves on it seconds later. Most raid mechanics test reaction; this one tests retention. Every other ability is a standard raid verb placed to compete for attention with that memory task.</span><span data-lang="zh"><b>织机守卫维尔萨</b>是一个围绕单一机制设计的团本首领概念，这个机制是<a class="sref" href="#ab-pl">图案锁定</a>：地板向全团显示一个图案、隐藏，几秒后按它结算。大多数团本机制考反应，这个考记忆。其余每个技能都是标准团本动词，作用是和这一项记忆任务争夺注意力。</span></p>
+
+  <div class="toc" id="toc">
+    <div class="toc-title"><span data-lang="en">Contents</span><span data-lang="zh">目录</span> [<button type="button" id="tocToggle" aria-expanded="true"><span data-lang="en">hide</span><span data-lang="zh">隐藏</span></button>]</div>
+    <ol id="tocList">
+      <li><span class="num">1</span><a href="#adventure"><span data-lang="en">Adventure Guide</span><span data-lang="zh">冒险指南</span></a></li>
+      <li><span class="num">2</span><a href="#overview"><span data-lang="en">Overview</span><span data-lang="zh">概览</span></a>
+        <ol>
+          <li><span class="num">2.1</span><a href="#role-dps"><span data-lang="en">Damage Dealers</span><span data-lang="zh">输出</span></a></li>
+          <li><span class="num">2.2</span><a href="#role-heal"><span data-lang="en">Healers</span><span data-lang="zh">治疗</span></a></li>
+          <li><span class="num">2.3</span><a href="#role-tank"><span data-lang="en">Tanks</span><span data-lang="zh">坦克</span></a></li>
+        </ol></li>
+      <li><span class="num">3</span><a href="#abilities"><span data-lang="en">Abilities</span><span data-lang="zh">技能</span></a>
+        <ol>
+          <li><span class="num">3.1</span><a href="#stage-1"><span data-lang="en">Stage One: Threads</span><span data-lang="zh">一阶段：丝线</span></a></li>
+          <li><span class="num">3.2</span><a href="#stage-i"><span data-lang="en">Intermission: Reweave</span><span data-lang="zh">过渡：重织</span></a></li>
+          <li><span class="num">3.3</span><a href="#stage-2"><span data-lang="en">Stage Two: Pattern</span><span data-lang="zh">二阶段：图案</span></a></li>
+          <li><span class="num">3.4</span><a href="#stage-3"><span data-lang="en">Stage Three: Unraveling</span><span data-lang="zh">三阶段：解体</span></a></li>
+        </ol></li>
+      <li><span class="num">4</span><a href="#cheatsheet"><span data-lang="en">Mechanics cheat sheet</span><span data-lang="zh">机制速查</span></a></li>
+    </ol>
+  </div>
+
+  <h2 id="adventure"><span data-lang="en">Adventure Guide</span><span data-lang="zh">冒险指南</span></h2>
+  <p class="ag"><span data-lang="en">Vael'thar weaves the floor of her hall from memory, and expects every intruder to stand on it the same way.</span><span data-lang="zh">维尔萨凭记忆织出大厅的地板，也要求每个闯入者凭记忆站上去。</span></p>
+
+  <h2 id="overview"><span data-lang="en">Overview</span><span data-lang="zh">概览</span></h2>
+  <p><span data-lang="en">The fight has three stages and an intermission. In Stage One, <a class="sref" href="#ab-ts">Thread Snap</a> and <a class="sref" href="#ab-ls">Loose Spool</a> pull the raid in different directions. At 70% health Vael'thar becomes immune; the raid crosses sweeping <a class="sref" href="#ab-wt">Warp Threads</a> while killing Spindles. Stage Two adds <a class="sref" href="#ab-pl">Pattern Lock</a>. In Stage Three the arena shrinks and, on Mythic, the hidden pattern rotates before it resolves.</span><span data-lang="zh">战斗分三个阶段和一个过渡。一阶段，<a class="sref" href="#ab-ts">断线</a>和<a class="sref" href="#ab-ls">松散线轴</a>把全团往不同方向拉。70% 血量时维尔萨免疫，全团一边穿过横扫的<a class="sref" href="#ab-wt">经线横扫</a>，一边击杀纺锤。二阶段加入<a class="sref" href="#ab-pl">图案锁定</a>。三阶段场地缩小，史诗难度下隐藏的图案会在结算前旋转。</span></p>
+
+  <div class="rolegrp" data-rolecol="dps">
+    <h3 id="role-dps"><img class="ico" src="assets/loom/flag-dps.png" alt="" width="16" height="16"><span data-lang="en">Damage Dealers</span><span data-lang="zh">输出</span></h3>
+    <ul class="wl">
+      <li><span data-lang="en">Interrupt <a class="sref" href="#ab-wb">Weave Bolt</a>; three kickers rotate.</span><span data-lang="zh">打断<a class="sref" href="#ab-wb">织线之矢</a>，三人轮换。</span></li>
+      <li><span data-lang="en">Soak <a class="sref" href="#ab-ls">Loose Spool</a> in groups of three.</span><span data-lang="zh"><a class="sref" href="#ab-ls">松散线轴</a>三人一组分摊。</span></li>
+      <li><span data-lang="en">Kill all <span class="dv" data-n="2" data-h="3" data-m="3">3</span> <a class="sref" href="#ab-sp">Spindles</a> within 45 seconds.</span><span data-lang="zh">45 秒内击杀全部 <span class="dv" data-n="2" data-h="3" data-m="3">3</span> 个<a class="sref" href="#ab-sp">纺锤</a>。</span></li>
+      <li><span data-lang="en">Memorize your group's <a class="sref" href="#ab-pl">Pattern Lock</a> shape, not individual tiles.</span><span data-lang="zh">记住所在小组的<a class="sref" href="#ab-pl">图案锁定</a>形状，不记单个格子。</span></li>
+    </ul>
+  </div>
+  <div class="rolegrp" data-rolecol="heal">
+    <h3 id="role-heal"><img class="ico" src="assets/loom/flag-heal.png" alt="" width="16" height="16"><span data-lang="en">Healers</span><span data-lang="zh">治疗</span></h3>
+    <ul class="wl">
+      <li data-min="h"><span data-lang="en">Dispel <a class="sref" href="#ab-kn">Knot</a> during the intermission.</span><span data-lang="zh">过渡阶段驱散<a class="sref" href="#ab-kn">绳结</a>。</span><span class="diffTag"><span data-lang="en">(Heroic and Mythic)</span><span data-lang="zh">（英雄与史诗）</span></span></li>
+      <li><span data-lang="en">Place one healer in each grid quadrant before <a class="sref" href="#ab-tg">Tighten</a>.</span><span data-lang="zh"><a class="sref" href="#ab-tg">收紧</a>前，每个网格象限放一名治疗。</span></li>
+      <li data-min="h"><span data-lang="en"><a class="sref" href="#ab-fr">Fraying</a> spreads within 5 yd<span class="dv" data-n="" data-h="" data-m=", 8 yd in Stage Three">, 8 yd in Stage Three</span>; keep carriers apart.</span><span data-lang="zh"><a class="sref" href="#ab-fr">磨损</a>在 5 码内扩散<span class="dv" data-n="" data-h="" data-m="，三阶段为 8 码">，三阶段为 8 码</span>，把携带者分开。</span><span class="diffTag"><span data-lang="en">(Heroic and Mythic)</span><span data-lang="zh">（英雄与史诗）</span></span></li>
+    </ul>
+  </div>
+  <div class="rolegrp" data-rolecol="tank">
+    <h3 id="role-tank"><img class="ico" src="assets/loom/flag-tank.png" alt="" width="16" height="16"><span data-lang="en">Tanks</span><span data-lang="zh">坦克</span></h3>
+    <ul class="wl">
+      <li><span data-lang="en">Swap <a class="sref" href="#ab-ss">Shearing Strike</a> at <span class="dv" data-n="4" data-h="3" data-m="3">3</span> stacks, <span class="dv" data-n="4" data-h="3" data-m="2">2</span> in Stage Three.</span><span data-lang="zh"><a class="sref" href="#ab-ss">剪切打击</a> <span class="dv" data-n="4" data-h="3" data-m="3">3</span> 层换坦，三阶段 <span class="dv" data-n="4" data-h="3" data-m="2">2</span> 层。</span></li>
+      <li><span data-lang="en">Keep the boss central so <a class="sref" href="#ab-ts">Thread Snap</a> targets can reach 15 yd in any direction.</span><span data-lang="zh">把首领拉在中央，让<a class="sref" href="#ab-ts">断线</a>目标朝任何方向都能跑出 15 码。</span></li>
+      <li><span data-lang="en">Take near-side <a class="sref" href="#ab-pl">Pattern Lock</a> tiles only.</span><span data-lang="zh"><a class="sref" href="#ab-pl">图案锁定</a>只站近侧格子。</span></li>
+    </ul>
+  </div>
+
+  <h2 id="abilities" class="clearR"><span data-lang="en">Abilities</span><span data-lang="zh">技能</span></h2>
+  <p class="diffnote"><span data-lang="en">Showing <span class="dv" data-n="Normal" data-h="Heroic" data-m="Mythic">Mythic</span> values. Change difficulty in the sidebar; abilities that do not appear on the selected difficulty are dimmed.</span><span data-lang="zh">当前显示 <span class="dv" data-n="普通" data-h="英雄" data-m="史诗">史诗</span> 数值。在左栏切换难度；所选难度下不出现的技能会变淡。</span></p>
+  <div class="flaglegend">
+    <span><img class="flg" src="assets/loom/flag-warn.png" alt="Important" title="Important" width="16" height="16"> <span data-lang="en">Important</span><span data-lang="zh">重要</span></span>
+    <span><img class="flg" src="assets/loom/flag-skull.png" alt="Deadly" title="Deadly" width="16" height="16"> <span data-lang="en">Deadly</span><span data-lang="zh">致命</span></span>
+    <span><img class="flg" src="assets/loom/flag-kick.png" alt="Interruptible" title="Interruptible" width="16" height="16"> <span data-lang="en">Interruptible</span><span data-lang="zh">可打断</span></span>
+    <span><img class="flg" src="assets/loom/flag-magic.png" alt="Magic effect" title="Magic effect" width="16" height="16"> <span data-lang="en">Magic effect</span><span data-lang="zh">魔法效果</span></span>
+    <span><img class="flg" src="assets/loom/flag-tank.png" alt="Tank alert" title="Tank alert" width="16" height="16"> <span data-lang="en">Tank alert</span><span data-lang="zh">坦克注意</span></span>
+    <span><img class="flg" src="assets/loom/flag-heal.png" alt="Healer alert" title="Healer alert" width="16" height="16"> <span data-lang="en">Healer alert</span><span data-lang="zh">治疗注意</span></span>
+  </div>
+
+  <div class="stagehead" id="stage-1"><span data-lang="en">Stage One: Threads</span><span data-lang="zh">一阶段：丝线</span><span class="hp">100–70%</span></div>
+  <ul class="wl">
+    <li class="ab" data-roles="tank" id="ab-ss"><span class="spell"><img class="sico" src="assets/loom/spell-ss.png" alt="" width="20" height="20"><a class="sname" href="#ab-ss"><span data-lang="en">Shearing Strike</span><span data-lang="zh">剪切打击</span></a></span><img class="flg" src="assets/loom/flag-tank.png" alt="Tank alert" title="Tank alert" width="16" height="16"> — <span data-lang="en">Every 8 sec, Vael'thar casts at her current target for 1.5 sec, applying a bleed that stacks and lasts 20 sec. Tanks swap at <span class="dv" data-n="4" data-h="3" data-m="3">3</span> stacks.</span><span data-lang="zh">每 8 秒，维尔萨对当前目标读条 1.5 秒，施加可叠加、持续 20 秒的流血。<span class="dv" data-n="4" data-h="3" data-m="3">3</span> 层换坦。</span></li>
+    <li class="ab" data-roles="heal,dps" id="ab-ts"><span class="spell"><img class="sico" src="assets/loom/spell-ts.png" alt="" width="20" height="20"><a class="sname" href="#ab-ts"><span data-lang="en">Thread Snap</span><span data-lang="zh">断线</span></a></span><img class="flg" src="assets/loom/flag-warn.png" alt="Important" title="Important" width="16" height="16"> — <span data-lang="en">Every 25 sec, tethers 3 random players who are not tanks to Vael'thar. A tether breaks when its target is 15 yds away. Each tether still intact after 6 sec inflicts 35% of maximum health to all players.</span><span data-lang="zh">每 25 秒，将 3 名随机非坦克玩家与维尔萨连线。目标距离 15 码时连线扯断。6 秒后仍存在的每条连线，对所有玩家造成相当于最大生命 35% 的伤害。</span></li>
+    <li class="ab" data-roles="dps" id="ab-ls"><span class="spell"><img class="sico" src="assets/loom/spell-ls.png" alt="" width="20" height="20"><a class="sname" href="#ab-ls"><span data-lang="en">Loose Spool</span><span data-lang="zh">松散线轴</span></a></span><img class="flg" src="assets/loom/flag-warn.png" alt="Important" title="Important" width="16" height="16"> — <span data-lang="en">Every 30 sec, a 6 yd circle appears 20 yds from Vael'thar and resolves after 3 sec. Damage is split among players inside. If fewer than 3 players are inside, all players take 45% of maximum health and bleed for 10 sec.</span><span data-lang="zh">每 30 秒，在距维尔萨 20 码处出现一个 6 码圈，3 秒后结算。伤害由圈内玩家平分。圈内不足 3 人时，所有玩家受到相当于最大生命 45% 的伤害，并流血 10 秒。</span></li>
+    <li class="ab" data-roles="dps" id="ab-wb"><span class="spell"><img class="sico" src="assets/loom/spell-wb.png" alt="" width="20" height="20"><a class="sname" href="#ab-wb"><span data-lang="en">Weave Bolt</span><span data-lang="zh">织线之矢</span></a></span><img class="flg" src="assets/loom/flag-kick.png" alt="Interruptible" title="Interruptible" width="16" height="16"> — <span data-lang="en">Every 12 sec, a 2 sec cast. If completed, inflicts 25% of maximum health to a random player and increases Vael'thar's casting speed for 4 sec.</span><span data-lang="zh">每 12 秒，读条 2 秒。读条完成则对随机玩家造成相当于最大生命 25% 的伤害，并提高维尔萨施法速度，持续 4 秒。</span></li>
+  </ul>
+
+  <div class="stagehead" id="stage-i"><span data-lang="en">Intermission: Reweave</span><span data-lang="zh">过渡：重织</span><span class="hp"><span data-lang="en">at 70%, 45 sec</span><span data-lang="zh">70% 时，45 秒</span></span></div>
+  <ul class="wl">
+    <li class="ab" data-roles="tank,heal,dps" id="ab-wt"><span class="spell"><img class="sico" src="assets/loom/spell-wt.png" alt="" width="20" height="20"><a class="sname" href="#ab-wt"><span data-lang="en">Warp Threads</span><span data-lang="zh">经线横扫</span></a></span><img class="flg" src="assets/loom/flag-skull.png" alt="Deadly" title="Deadly" width="16" height="16"> — <span data-lang="en">Four threads sweep the room, one every 8 sec, alternating north to south and east to west, each after a 1.2 sec warning. Each thread has a single 4 yd gap. Players struck take 40% of maximum health and are knocked down for 3 sec.</span><span data-lang="zh">四条经线横扫房间，每 8 秒一条，南北与东西交替，每条有 1.2 秒预警，只有一个 4 码缺口。被击中的玩家受到相当于最大生命 40% 的伤害，并被击倒 3 秒。</span></li>
+    <li class="ab" data-roles="dps" id="ab-sp"><span class="spell"><img class="sico" src="assets/loom/spell-sp.png" alt="" width="20" height="20"><a class="sname" href="#ab-sp"><span data-lang="en">Spindles</span><span data-lang="zh">纺锤</span></a></span> — <span data-lang="en">Vael'thar becomes immune and summons <span class="dv" data-n="2" data-h="3" data-m="3">3</span> Spindles at the edge of the room, each with 12% of her health.</span><span data-lang="zh">维尔萨进入免疫，并在房间边缘召唤 <span class="dv" data-n="2" data-h="3" data-m="3">3</span> 个纺锤，每个拥有她 12% 的生命值。</span>
+      <ul>
+        <li class="ab" data-roles="heal" data-min="h" id="ab-kn"><span class="spell"><img class="sico" src="assets/loom/spell-kn.png" alt="" width="20" height="20"><a class="sname" href="#ab-kn"><span data-lang="en">Knot</span><span data-lang="zh">绳结</span></a></span><img class="flg" src="assets/loom/flag-magic.png" alt="Magic effect" title="Magic effect" width="16" height="16"><img class="flg" src="assets/loom/flag-heal.png" alt="Healer alert" title="Healer alert" width="16" height="16"> — <span data-lang="en">Every 10 sec, each Spindle roots its nearest player in place for 6 sec.</span><span data-lang="zh">每 10 秒，每个纺锤将最近的玩家定身 6 秒。</span><span class="diffTag"><span data-lang="en">(Heroic and Mythic)</span><span data-lang="zh">（英雄与史诗）</span></span></li>
+        <li class="ab" data-roles="tank,heal,dps" data-min="m" id="ab-rw"><span class="spell"><img class="sico" src="assets/loom/spell-rw.png" alt="" width="20" height="20"><a class="sname" href="#ab-rw"><span data-lang="en">Rewoven</span><span data-lang="zh">重织强化</span></a></span><img class="flg" src="assets/loom/flag-skull.png" alt="Deadly" title="Deadly" width="16" height="16"> — <span data-lang="en">Each Spindle alive when the intermission ends increases Vael'thar's damage by 15% for the rest of the encounter.</span><span data-lang="zh">过渡结束时每个存活的纺锤，使维尔萨在剩余战斗中造成的伤害提高 15%。</span><span class="diffTag"><span data-lang="en">(Mythic)</span><span data-lang="zh">（史诗）</span></span></li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="stagehead" id="stage-2"><span data-lang="en">Stage Two: Pattern</span><span data-lang="zh">二阶段：图案</span><span class="hp">70–35%</span></div>
+  <ul class="wl">
+    <li class="ab" data-roles="tank,heal,dps" id="ab-pl"><span class="spell"><img class="sico" src="assets/loom/spell-pl.png" alt="" width="20" height="20"><a class="sname" href="#ab-pl"><span data-lang="en">Pattern Lock</span><span data-lang="zh">图案锁定</span></a></span><img class="flg" src="assets/loom/flag-warn.png" alt="Important" title="Important" width="16" height="16"><img class="flg" src="assets/loom/flag-skull.png" alt="Deadly" title="Deadly" width="16" height="16"> — <span data-lang="en">Every 40 sec, the floor becomes a 6×6 grid of 5 yd tiles. Twelve safe tiles light up as four shapes of three tiles and <span class="dv" data-n="stay lit until Tighten" data-h="stay lit for 6 sec, then go dark" data-m="stay lit for 4 sec, then go dark">stay lit for 4 sec, then go dark</span>.</span><span data-lang="zh">每 40 秒，地板变为 6×6、每格 5 码的网格。12 个安全格以四组 3 格形状点亮，<span class="dv" data-n="一直亮到收紧" data-h="亮 6 秒后熄灭" data-m="亮 4 秒后熄灭">亮 4 秒后熄灭</span>。</span>
+      <ul>
+        <li class="ab" data-roles="tank,heal,dps" id="ab-tg"><span class="spell"><img class="sico" src="assets/loom/spell-tg.png" alt="" width="20" height="20"><a class="sname" href="#ab-tg"><span data-lang="en">Tighten</span><span data-lang="zh">收紧</span></a></span><img class="flg" src="assets/loom/flag-skull.png" alt="Deadly" title="Deadly" width="16" height="16"> — <span data-lang="en">10 sec after Pattern Lock begins, players not standing on a safe tile take 60% of maximum health and are stunned for 4 sec.</span><span data-lang="zh">图案锁定开始 10 秒后，未站在安全格上的玩家受到相当于最大生命 60% 的伤害，并被眩晕 4 秒。</span></li>
+      </ul>
+    </li>
+    <li class="ab" data-roles="heal" data-min="m" id="ab-fr"><span class="spell"><img class="sico" src="assets/loom/spell-fr.png" alt="" width="20" height="20"><a class="sname" href="#ab-fr"><span data-lang="en">Fraying</span><span data-lang="zh">磨损</span></a></span><img class="flg" src="assets/loom/flag-magic.png" alt="Magic effect" title="Magic effect" width="16" height="16"><img class="flg" src="assets/loom/flag-heal.png" alt="Healer alert" title="Healer alert" width="16" height="16"> — <span data-lang="en">Every 20 sec, 4 players take damage every 2 sec for 12 sec. The effect spreads to other players within 5 yds. It lands 6 sec into each Pattern Lock.</span><span data-lang="zh">每 20 秒，4 名玩家每 2 秒受到伤害，持续 12 秒。效果会扩散给 5 码内的其他玩家。落在每次图案锁定开始后第 6 秒。</span><span class="diffTag"><span data-lang="en">(Mythic)</span><span data-lang="zh">（史诗）</span></span></li>
+    <li class="ab" data-roles="tank,heal,dps"><span data-lang="en">Shearing Strike, Thread Snap, Loose Spool and Weave Bolt continue on their Stage One timers. Thread Snap and Loose Spool are not cast in the last 2 sec before Tighten.</span><span data-lang="zh">剪切打击、断线、松散线轴、织线之矢按一阶段计时继续。收紧前最后 2 秒不施放断线和松散线轴。</span></li>
+  </ul>
+
+  <div class="stagehead" id="stage-3"><span data-lang="en">Stage Three: Unraveling</span><span data-lang="zh">三阶段：解体</span><span class="hp">35–0%</span></div>
+  <ul class="wl">
+    <li class="ab" data-roles="tank,heal,dps" data-min="h" id="ab-ac"><span class="spell"><img class="sico" src="assets/loom/spell-ac.png" alt="" width="20" height="20"><a class="sname" href="#ab-ac"><span data-lang="en">Arena Collapse</span><span data-lang="zh">场地坍缩</span></a></span><img class="flg" src="assets/loom/flag-skull.png" alt="Deadly" title="Deadly" width="16" height="16"> — <span data-lang="en">The outer ring of tiles unravels over 5 sec, leaving a <span class="dv" data-n="6×6" data-h="5×5" data-m="4×4">4×4</span> grid. Players outside the grid take 20% of maximum health every sec.</span><span data-lang="zh">外圈格子在 5 秒内解体，只剩 <span class="dv" data-n="6×6" data-h="5×5" data-m="4×4">4×4</span> 网格。网格外的玩家每秒受到相当于最大生命 20% 的伤害。</span><span class="diffTag"><span data-lang="en">(Heroic and Mythic)</span><span data-lang="zh">（英雄与史诗）</span></span></li>
+    <li class="ab" data-roles="tank,heal,dps" data-min="m" id="ab-tl"><span class="spell"><img class="sico" src="assets/loom/spell-tl.png" alt="" width="20" height="20"><a class="sname" href="#ab-tl"><span data-lang="en">Turn the Loom</span><span data-lang="zh">转动织机</span></a></span><img class="flg" src="assets/loom/flag-warn.png" alt="Important" title="Important" width="16" height="16"> — <span data-lang="en">Pattern Lock occurs every 30 sec with 8 safe tiles in four pairs. 6 sec after it begins, the hidden pattern rotates 90° clockwise around the center of the grid. Tighten resolves on the rotated tiles.</span><span data-lang="zh">图案锁定每 30 秒一次，8 个安全格分为四对。开始 6 秒后，隐藏的图案绕网格中心顺时针旋转 90°。收紧按旋转后的格子结算。</span><span class="diffTag"><span data-lang="en">(Mythic)</span><span data-lang="zh">（史诗）</span></span></li>
+    <li class="ab" data-roles="tank" id="ab-ss3"><span class="spell"><img class="sico" src="assets/loom/spell-ss.png" alt="" width="20" height="20"><a class="sname" href="#ab-ss"><span data-lang="en">Shearing Strike</span><span data-lang="zh">剪切打击</span></a></span><img class="flg" src="assets/loom/flag-tank.png" alt="Tank alert" title="Tank alert" width="16" height="16"> — <span data-lang="en">Tanks now swap at <span class="dv" data-n="4" data-h="3" data-m="2">2</span> stacks.</span><span data-lang="zh">此阶段 <span class="dv" data-n="4" data-h="3" data-m="2">2</span> 层换坦。</span></li>
+    <li class="ab" data-roles="heal" data-min="h" id="ab-fr3"><span class="spell"><img class="sico" src="assets/loom/spell-fr.png" alt="" width="20" height="20"><a class="sname" href="#ab-fr"><span data-lang="en">Fraying</span><span data-lang="zh">磨损</span></a></span><img class="flg" src="assets/loom/flag-magic.png" alt="Magic effect" title="Magic effect" width="16" height="16"><img class="flg" src="assets/loom/flag-heal.png" alt="Healer alert" title="Healer alert" width="16" height="16"> — <span data-lang="en">Spreads to players within <span class="dv" data-n="5" data-h="5" data-m="8">8</span> yds.</span><span data-lang="zh">扩散给 <span class="dv" data-n="5" data-h="5" data-m="8">8</span> 码内的玩家。</span><span class="diffTag"><span data-lang="en">(Heroic and Mythic)</span><span data-lang="zh">（英雄与史诗）</span></span></li>
+    <li class="ab" data-roles="tank,heal,dps" id="ab-bz"><span class="spell"><img class="sico" src="assets/loom/spell-bz.png" alt="" width="20" height="20"><a class="sname" href="#ab-bz"><span data-lang="en">Berserk</span><span data-lang="zh">狂暴</span></a></span><img class="flg" src="assets/loom/flag-skull.png" alt="Deadly" title="Deadly" width="16" height="16"> — <span data-lang="en">After <span class="dv" data-n="12 min" data-h="10 min" data-m="9 min">9 min</span>, Vael'thar's damage is increased by 500%.</span><span data-lang="zh"><span class="dv" data-n="12 分钟" data-h="10 分钟" data-m="9 分钟">9 分钟</span>后，维尔萨造成的伤害提高 500%。</span></li>
+  </ul>
+
+  <h2 id="cheatsheet"><span data-lang="en">Mechanics cheat sheet</span><span data-lang="zh">机制速查</span></h2>
+  <p><span data-lang="en">Top-down replay of each stage on Mythic, 20 raiders coloured by role. Drag to rotate. The last tab plots every cast on a nine-minute axis for the selected difficulty.</span><span data-lang="zh">史诗难度下每个阶段的俯视回放，20 名团员按职责着色，拖拽旋转。最后一个标签按所选难度，把每次施法画在九分钟时间轴上。</span></p>
+  <div class="cheat">
+    <div class="tabs" role="tablist" aria-label="Cheat sheet">
+      <button type="button" class="tab" role="tab" data-tab="p1" aria-selected="true"><span data-lang="en">Stage One</span><span data-lang="zh">一阶段</span></button>
+      <button type="button" class="tab" role="tab" data-tab="inter" aria-selected="false" tabindex="-1"><span data-lang="en">Intermission</span><span data-lang="zh">过渡</span></button>
+      <button type="button" class="tab" role="tab" data-tab="p2" aria-selected="false" tabindex="-1"><span data-lang="en">Stage Two</span><span data-lang="zh">二阶段</span></button>
+      <button type="button" class="tab" role="tab" data-tab="p3" aria-selected="false" tabindex="-1"><span data-lang="en">Stage Three</span><span data-lang="zh">三阶段</span></button>
+      <button type="button" class="tab" role="tab" data-tab="timeline" aria-selected="false" tabindex="-1"><span data-lang="en">Cast timeline</span><span data-lang="zh">施法时间轴</span></button>
+    </div>
+    <div class="tabpanel" role="tabpanel">
+      <div id="replayBlock">
+        <div class="bossframe">
+          <span class="bname"><span data-lang="en">Vael'thar</span><span data-lang="zh">维尔萨</span></span>
+          <div class="hpbar" aria-hidden="true"><i id="hpFill"></i></div>
+          <span class="hpval" id="hpVal">100%</span>
+        </div>
+        <div class="stage" id="stage" tabindex="0" aria-label="3D stage replay">
+          <canvas id="scene"></canvas>
+          <div class="labels" id="labels" aria-hidden="true"></div>
+        </div>
+        <span class="rphase" id="replayPhase"></span>
+        <p class="rcap" id="replayCap"></p>
+        <div class="legend">
+          <span><i class="dot" style="background:var(--gold)"></i><span data-lang="en">Boss and boss effects</span><span data-lang="zh">首领与首领效果</span></span>
+          <span><i class="dot" style="background:var(--tank)"></i><span data-lang="en">Tank</span><span data-lang="zh">坦克</span></span>
+          <span><i class="dot" style="background:var(--heal)"></i><span data-lang="en">Healer</span><span data-lang="zh">治疗</span></span>
+          <span><i class="dot" style="background:var(--dps)"></i><span data-lang="en">Damage Dealer</span><span data-lang="zh">输出</span></span>
+          <span><i class="dot" style="background:var(--crimson)"></i><span data-lang="en">Failure</span><span data-lang="zh">失误</span></span>
+        </div>
+      </div>
+      <div id="timelineBlock" hidden>
+        <div class="tlscroll"><div class="tlinner">
+          <div class="phaserow" id="phaserow"></div>
+          <div id="tl"></div>
+        </div></div>
+        <div class="tllegend">
+          <span><svg viewBox="0 0 22 14" aria-hidden="true"><rect x="10" y="3" width="2" height="8" fill="#d8ccb4"/></svg><span data-lang="en">Cast</span><span data-lang="zh">施放</span></span>
+          <span><svg viewBox="0 0 22 14" aria-hidden="true"><rect x="9.5" y="0" width="3" height="14" fill="#8fb3e8"/></svg><span data-lang="en">Tank swap</span><span data-lang="zh">换坦</span></span>
+          <span><svg viewBox="0 0 22 14" aria-hidden="true"><rect x="2" y="3" width="18" height="8" fill="#f0c35f"/></svg><span data-lang="en">Pattern Lock, shown and hidden</span><span data-lang="zh">图案锁定，显示加隐藏</span></span>
+          <span><svg viewBox="0 0 22 14" aria-hidden="true"><rect x="2" y="3" width="18" height="8" fill="#f0c35f" stroke="#fff"/><image href="assets/loom/flag-rotate.png" x="5" y="1" width="12" height="12"/></svg><span data-lang="en">Pattern rotates</span><span data-lang="zh">图案旋转</span></span>
+          <span><svg viewBox="0 0 22 14" aria-hidden="true"><line x1="11" y1="0" x2="11" y2="14" stroke="#d9433b" stroke-width="2" stroke-dasharray="3 2"/></svg><span data-lang="en">Berserk</span><span data-lang="zh">狂暴</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p><span data-lang="en">Fan encounter design for portfolio purposes. World of Warcraft is the property of Blizzard Entertainment; this concept is not affiliated with or endorsed by Blizzard, and this page is not affiliated with any fan wiki or guide site.</span><span data-lang="zh">本页为作品集用途的同人遭遇战设计。魔兽世界为暴雪娱乐所有；本概念与暴雪无关，亦未获其认可，本页也与任何玩家维基或攻略网站无关。</span></p>
+    <p><span data-lang="en">Artwork: spell icons from <a href="https://opengameart.org/content/painterly-spell-icons-part-1">Painterly Spell Icons</a> by J. W. Bjerk (CC-BY 3.0); flag and role icons from <a href="https://game-icons.net">game-icons.net</a> by Lorc, Delapouite and Zeromancer (CC-BY 3.0); textures from <a href="https://ambientcg.com">ambientCG</a> (CC0); frames, bars and buttons from <a href="https://kenney.nl">Kenney</a> (CC0). All recoloured or cropped.</span><span data-lang="zh">美术素材：技能图标来自 J. W. Bjerk 的 <a href="https://opengameart.org/content/painterly-spell-icons-part-1">Painterly Spell Icons</a>（CC-BY 3.0）；提示与职责图标来自 <a href="https://game-icons.net">game-icons.net</a> 的 Lorc、Delapouite、Zeromancer（CC-BY 3.0）；材质来自 <a href="https://ambientcg.com">ambientCG</a>（CC0）；边框、进度条和按钮来自 <a href="https://kenney.nl">Kenney</a>（CC0）。均经重新着色或裁切。</span></p>
+  </footer>
+</main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>if(!window.THREE){document.write('<script src="three.min.js"><\/script>');}</script>
+<script>
+(function(){
+  window.__select=function(name){ document.body.setAttribute('data-ab',name); if(window.__demo&&window.__demo.build) window.__demo.build(name); };
+  document.body.setAttribute('data-ab','p1');
+  if(!window.THREE) return;
+
+  var stage=document.getElementById('stage'), canvas=document.getElementById('scene');
+  var labelsEl=document.getElementById('labels'), phaseEl=document.getElementById('replayPhase'), capEl=document.getElementById('replayCap'), hpFill=document.getElementById('hpFill'), hpVal=document.getElementById('hpVal');
+  function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  var C={}; function readTheme(){ C.bg=cssVar('--ground'); C.surface=cssVar('--panel'); C.ink=cssVar('--ink'); C.muted=cssVar('--muted'); C.rule=cssVar('--rule-2'); C.boss=cssVar('--thread'); C.raid=cssVar('--tank'); C.heal=cssVar('--heal'); C.tank=cssVar('--tank'); C.dps=cssVar('--dps'); C.bad=cssVar('--crimson'); }
+  readTheme();
+
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(40,16/9,0.1,300);
+  var orbit={theta:0.0,phi:0.62,r:78,target:new THREE.Vector3(0,0,0)};
+  function placeCamera(){ var x=orbit.r*Math.sin(orbit.phi)*Math.sin(orbit.theta), y=orbit.r*Math.cos(orbit.phi), z=orbit.r*Math.sin(orbit.phi)*Math.cos(orbit.theta); camera.position.set(orbit.target.x+x,orbit.target.y+y,orbit.target.z+z); camera.lookAt(orbit.target); }
+  placeCamera();
+  scene.add(new THREE.HemisphereLight(0xffffff,0x888888,0.9));
+  var sun=new THREE.DirectionalLight(0xffffff,0.5); sun.position.set(20,40,10); scene.add(sun);
+
+  // arena: 60 x 60 yd (6x6 tiles of 10 yd for readability; spec says 5 yd tiles — scaled 2x here)
+  var ARENA=30, TILE=10;
+  var groundTex=new THREE.TextureLoader().load('data:image/jpeg;base64,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'); groundTex.wrapS=groundTex.wrapT=THREE.RepeatWrapping; groundTex.repeat.set(2,2); var matGround=new THREE.MeshLambertMaterial({map:groundTex,color:0xffffff});
+  var ground=new THREE.Mesh(new THREE.CircleGeometry(ARENA+6,64),matGround); ground.rotation.x=-Math.PI/2; scene.add(ground);
+  var edge=new THREE.Mesh(new THREE.RingGeometry(ARENA-0.3,ARENA,96),new THREE.MeshBasicMaterial({color:new THREE.Color(C.rule),side:THREE.DoubleSide})); edge.rotation.x=-Math.PI/2; edge.position.y=0.02; scene.add(edge);
+
+  // tiles 6x6
+  var tiles=[]; var tileMat=function(){ return new THREE.MeshBasicMaterial({color:new THREE.Color(C.rule),transparent:true,opacity:0.18,side:THREE.DoubleSide}); };
+  for(var gx=0;gx<6;gx++) for(var gz=0;gz<6;gz++){ var m=new THREE.Mesh(new THREE.PlaneGeometry(TILE-0.6,TILE-0.6),tileMat()); m.rotation.x=-Math.PI/2; m.position.set((gx-2.5)*TILE,0.03,(gz-2.5)*TILE); m.visible=false; m.userData={gx:gx,gz:gz}; scene.add(m); tiles.push(m); }
+  function tile(gx,gz){ return tiles[gx*6+gz]; }
+  function tileCenter(gx,gz){ return new THREE.Vector3((gx-2.5)*TILE,0,(gz-2.5)*TILE); }
+  function setTiles(fn){ tiles.forEach(function(m){ fn(m); }); }
+
+  // boss
+  var boss=new THREE.Group();
+  var bmat=new THREE.MeshLambertMaterial({color:new THREE.Color(C.boss)});
+  var bb=new THREE.Mesh(new THREE.CylinderGeometry(2.4,3,5,20),bmat); bb.position.y=2.5; boss.add(bb);
+  var bh=new THREE.Mesh(new THREE.SphereGeometry(1.6,16,12),bmat); bh.position.y=6; boss.add(bh);
+  scene.add(boss);
+
+  // raid
+  function raider(role){ var col=role==='tank'?C.tank:(role==='heal'?C.heal:C.dps); var g=new THREE.Group(); var mat=new THREE.MeshLambertMaterial({color:new THREE.Color(col)});
+    var b=new THREE.Mesh(new THREE.CylinderGeometry(0.55,0.55,1.5,12),mat); b.position.y=0.95; var h=new THREE.Mesh(new THREE.SphereGeometry(0.5,12,10),mat); h.position.y=2.0; g.add(b); g.add(h);
+    var base=new THREE.Mesh(new THREE.CylinderGeometry(0.7,0.7,0.08,16),new THREE.MeshBasicMaterial({color:new THREE.Color(col),transparent:true,opacity:0.5})); base.position.y=0.04; g.add(base);
+    var fail=new THREE.Mesh(new THREE.RingGeometry(0.9,1.15,24),new THREE.MeshBasicMaterial({color:new THREE.Color(C.bad),transparent:true,opacity:0.95,side:THREE.DoubleSide,depthTest:false})); fail.rotation.x=-Math.PI/2; fail.position.y=0.06; fail.visible=false; fail.renderOrder=10; g.add(fail);
+    g.userData={role:role,fail:fail,home:new THREE.Vector3(),target:new THREE.Vector3(),speed:9}; scene.add(g); return g; }
+  var raid=[]; for(var i=0;i<2;i++) raid.push(raider('tank')); for(var i=0;i<4;i++) raid.push(raider('heal')); for(var i=0;i<14;i++) raid.push(raider('dps'));
+  var tanks=raid.slice(0,2), heals=raid.slice(2,6), dps=raid.slice(6);
+  function defaultFormation(){ tanks[0].userData.home.set(-3,0,-14); tanks[1].userData.home.set(3,0,-14);
+    heals.forEach(function(h,i){ h.userData.home.set(-12+i*8,0,4); });
+    dps.forEach(function(d,i){ var a=Math.PI*(0.15+0.7*i/13); d.userData.home.set(Math.cos(a)*16,0,-6+Math.sin(a)*14); });
+    raid.forEach(function(r){ r.position.copy(r.userData.home); r.userData.target.copy(r.userData.home); }); }
+  function moveAll(dt){ raid.forEach(function(r){ var d=new THREE.Vector3().subVectors(r.userData.target,r.position); d.y=0; var L=d.length(); if(L>0.05){ var s=Math.min(L,r.userData.speed*dt); r.position.addScaledVector(d.normalize(),s); r.rotation.y=Math.atan2(d.x,d.z); } }); }
+
+  // effect pools
+  var rings=[]; for(var i=0;i<40;i++){ var m=new THREE.Mesh(new THREE.RingGeometry(0.9,1,48),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false})); m.rotation.x=-Math.PI/2; m.visible=false; m.renderOrder=5; scene.add(m); rings.push({m:m,alive:false}); }
+  function ring(pos,color,r,life,opts){ opts=opts||{}; for(var i=0;i<rings.length;i++){ if(!rings[i].alive){ var R=rings[i]; R.alive=true; R.age=0; R.life=life; R.r0=r; R.grow=opts.grow||0; R.op=opts.opacity||0.9; R.m.material.color.set(color); R.m.material.depthTest=!opts.through; R.m.position.set(pos.x,0.05+(opts.y||0),pos.z); R.m.visible=true; R.m.scale.set(r,r,1); return R; } } }
+  function updateRings(dt){ rings.forEach(function(R){ if(!R.alive) return; R.age+=dt; var k=R.age/R.life; if(k>=1){ R.alive=false; R.m.visible=false; return; } var s=R.r0+R.grow*k; R.m.scale.set(s,s,1); R.m.material.opacity=R.op*(1-k); }); }
+  function clearRings(){ rings.forEach(function(R){ R.alive=false; R.m.visible=false; }); }
+  var lines=[]; function line(a,b,color,opts){ opts=opts||{}; var g=new THREE.BufferGeometry().setFromPoints([a,b]); var m=new THREE.Line(g,new THREE.LineBasicMaterial({color:new THREE.Color(color),transparent:true,opacity:opts.opacity||0.9})); m.renderOrder=6; scene.add(m); lines.push(m); return m; }
+  function clearLines(){ lines.forEach(function(l){ scene.remove(l); }); lines=[]; }
+  var extras=[]; function addExtra(m){ scene.add(m); extras.push(m); return m; } function clearExtras(){ extras.forEach(function(m){ scene.remove(m); }); extras=[]; }
+  var labels=[]; function label(obj,en,zh,dy){ var el=document.createElement('div'); el.className='vl'; labelsEl.appendChild(el); var L={obj:obj,en:en,zh:zh,el:el,dy:dy||3.2,show:true}; labels.push(L); return L; }
+  function clearLabels(){ labels.forEach(function(L){ L.el.remove(); }); labels=[]; }
+  var v3=new THREE.Vector3();
+  function updateLabels(){ var lang=document.body.getAttribute('data-show')||'en', w=stage.clientWidth, h=stage.clientHeight; labels.forEach(function(L){ if(!L.show){ L.el.style.display='none'; return; } var p=L.obj.isVector3?L.obj:L.obj.position; v3.set(p.x,p.y+L.dy,p.z).project(camera); L.el.style.display='block'; L.el.textContent=L[lang]||L.en; L.el.style.left=((v3.x*0.5+0.5)*w)+'px'; L.el.style.top=((-v3.y*0.5+0.5)*h)+'px'; }); }
+
+  var CAP={
+    p1:{en:'Baseline kit. Tanks swap at 3 stacks of Shearing Strike. Three tethered DPS run 15 yd out to snap their threads while a Loose Spool circle arms 20 yd away; the soak group has to pick which job to do first. A kicker interrupts Weave Bolt.',
+        zh:'基础技能组。剪切打击 3 层换坦。三名被连线的输出跑出 15 码扯断丝线，同时 20 码外的松散线轴圈在读条；分摊组要决定先做哪件事。打断者打断织线之矢。'},
+    inter:{en:'Boss immune at the centre. Warp Threads sweep the arena with a single 4 yd gap each; the raid funnels through. Three Spindles on the edge, each rooting its nearest player with Knot until a healer dispels. Adds alive at 45 s empower the boss.',
+        zh:'Boss 在中央免疫。经线横扫场地，每条只有一个 4 码缺口，全团从缺口穿过。三个纺锤在边缘，各自用绳结定身最近的玩家，直到治疗驱散。45 秒时存活的小怪强化 Boss。'},
+    p2:{en:'Pattern Lock. Twelve safe tiles light up for 4 s as four 3-tile shapes, then go dark. Raiders converge on their remembered tiles while Fraying spreads through anyone who bunches up. Tighten resolves at 10 s: wrong tiles flash red.',
+        zh:'图案锁定。12 个安全格以四个 3 格形状点亮 4 秒，然后熄灭。团员向记住的格子聚拢，磨损在扎堆的人之间扩散。第 10 秒收紧结算：站错的格子闪红。'},
+    p3:{en:'The outer ring unravels; the raid lives on 4×4. The pattern is shown, hidden, then rotated 90° by Turn the Loom before it resolves. Tanks swap at 2 stacks. Berserk at 9:00.',
+        zh:'外圈解体，全团在 4×4 里作战。图案显示、隐藏，然后被转动织机旋转 90° 再结算。2 层换坦。9:00 狂暴。'}
+  };
+  var PH={
+    p1:[[0,{en:'Shearing Strike: tank A at 2 stacks',zh:'剪切打击：坦克 A 2 层'}],[2.5,{en:'Thread Snap: 3 tethers, run 15 yd',zh:'断线：3 条连线，跑出 15 码'}],[5,{en:'Loose Spool arming 3 s: soak with 3+',zh:'松散线轴读条 3 秒：3 人以上分摊'}],[6.5,{en:'Tank swap at 3 stacks',zh:'3 层换坦'}],[8.5,{en:'Weave Bolt: interrupt',zh:'织线之矢：打断'}],[10,{en:'Soak resolved',zh:'分摊结算'}]],
+    inter:[[0,{en:'70%: boss to centre, immune',zh:'70%：Boss 移至中央，免疫'}],[1.5,{en:'Spindles spawn, raid splits 6/6/6',zh:'纺锤出现，全团分 6/6/6'}],[3,{en:'Warp Thread N→S, one 4 yd gap',zh:'经线南北横扫，一个 4 码缺口'}],[7,{en:'Knot roots a player: dispel',zh:'绳结定身：驱散'}],[9,{en:'Warp Thread E→W',zh:'经线东西横扫'}],[12,{en:'Spindles down at 40 s: no empower',zh:'40 秒纺锤全灭：未强化'}]],
+    p2:[[0,{en:'Pattern Lock: 12 safe tiles shown',zh:'图案锁定：显示 12 个安全格'}],[4,{en:'Pattern hidden: move from memory',zh:'图案隐藏：凭记忆移动'}],[6,{en:'Fraying lands while raiders converge',zh:'磨损在聚拢时落下'}],[8,{en:'Tethers and soaks suppressed',zh:'连线与分摊被抑制'}],[10,{en:'Tighten: wrong tiles 60% + stun',zh:'收紧：错格 60% + 眩晕'}],[12,{en:'Back to the P1 kit',zh:'回到一阶段技能组'}]],
+    p3:[[0,{en:'35%: outer ring unravels',zh:'35%：外圈解体'}],[2,{en:'Pattern shown: 4 pairs on 4×4',zh:'图案显示：4×4 上的 4 对'}],[6,{en:'Hidden. Turn the Loom: rotate 90° CW',zh:'隐藏。转动织机：顺时针 90°'}],[9,{en:'Raid resolves on rotated tiles',zh:'全团按旋转后的位置站位'}],[12,{en:'Tighten. Tank swap at 2 stacks',zh:'收紧。2 层换坦'}]]
+  };
+  var cur=null, T=0, LOOP=12, S={};
+
+  function build(name){
+    clearRings(); clearLines(); clearLabels(); clearExtras(); T=0; S={}; cur=name;
+    raid.forEach(function(r){ r.visible=true; r.userData.fail.visible=false; r.userData.speed=9; });
+    setTiles(function(m){ m.visible=false; m.material.color.set(C.rule); m.material.opacity=0.18; });
+    boss.visible=true; boss.position.set(0,0,-18); boss.scale.set(1,1,1);
+    edge.material.color.set(C.rule);
+    defaultFormation();
+    if(name==='p1'){ LOOP=12; S.tethered=[dps[2],dps[6],dps[10]]; S.soak=new THREE.Vector3(14,0,8); S.stacksA=2; S.stacksB=0;
+      S.lt=label(tanks[0],'Tank A · Shearing ×2','坦克 A · 剪切 ×2',3.0); S.lt2=label(tanks[1],'Tank B','坦克 B',6.4); S.lb=label(boss,"Vael'thar",'维尔萨',10);
+      S.ls=label(S.soak,'Loose Spool · 6 yd · soak 3+','松散线轴 · 6 码 · 3 人分摊',0.8); S.ls.show=false; S.lk=label(dps[0],'Kicker','打断者',3.4);
+      S.soakers=[dps[11],dps[12],dps[13]]; }
+    if(name==='inter'){ LOOP=14; boss.position.set(0,0,0); S.adds=[]; for(var i=0;i<3;i++){ var a=i*Math.PI*2/3+Math.PI/6; var g=new THREE.Group(); var mat=new THREE.MeshLambertMaterial({color:new THREE.Color(C.boss)}); var c=new THREE.Mesh(new THREE.ConeGeometry(1.6,4,10),mat); c.position.y=2; g.add(c); g.position.set(Math.cos(a)*24,0,Math.sin(a)*24); addExtra(g); S.adds.push(g); label(g,'Spindle · 12%','纺锤 · 12%',5); }
+      label(boss,'Immune · 45 s','免疫 · 45 秒',8);
+      S.groups=[dps.slice(0,5).concat([heals[0]]),dps.slice(5,10).concat([heals[1]]),dps.slice(10,14).concat([heals[2],tanks[0]])];
+      S.groups.forEach(function(gr,gi){ var ad=S.adds[gi]; gr.forEach(function(r,k){ var ang=Math.atan2(ad.position.z,ad.position.x); var rr=18-(k%3)*2; var off=(k-2.5)*0.12; r.userData.target.set(Math.cos(ang+off)*rr,0,Math.sin(ang+off)*rr); }); });
+      heals[3].userData.target.set(0,0,10); tanks[1].userData.target.set(0,0,12);
+      S.lineMesh=addExtra(new THREE.Mesh(new THREE.BoxGeometry(2*ARENA,0.4,1.2),new THREE.MeshBasicMaterial({color:new THREE.Color(C.boss),transparent:true,opacity:0.9}))); S.lineMesh.visible=false;
+      S.gapMesh=addExtra(new THREE.Mesh(new THREE.BoxGeometry(8,0.5,1.4),new THREE.MeshBasicMaterial({color:new THREE.Color(C.surface)}))); S.gapMesh.visible=false;
+      S.lroot=label(dps[3],'Knot: rooted, dispel','绳结：定身，驱散',3.4); S.lroot.show=false; }
+    if(name==='p2'||name==='p3'){ LOOP=name==='p2'?13:14; S.rot=name==='p3'; S.inner=name==='p3';
+      setTiles(function(m){ var inner=m.userData.gx>=1&&m.userData.gx<=4&&m.userData.gz>=1&&m.userData.gz<=4; m.visible=!S.inner||inner; });
+      if(S.inner){ edge.material.color.set(C.bad); }
+      // safe tiles: 4 shapes of 3 (p2) or 4 pairs (p3)
+      S.safe=S.inner?[[1,1],[2,1],[3,2],[4,2],[1,4],[1,3],[4,4],[3,4]]:[[0,0],[1,0],[1,1],[4,0],[5,0],[5,1],[0,4],[0,5],[1,5],[4,5],[5,5],[5,4]];
+      function rot(p){ return [5-p[1],p[0]]; } // 90 deg CW on 6x6 about centre
+      S.resolveSafe=S.rot?S.safe.map(function(p){ var q=rot(p); return q; }):S.safe;
+      var walkers=raid.slice();
+      S.assign=walkers.map(function(r,i){ return S.resolveSafe[i%S.resolveSafe.length]; });
+      S.wrongOne=walkers[walkers.length-1]; // one raider goes to the un-rotated / wrong tile to show the fail state
+      S.walkers=walkers; label(boss,'Pattern Lock','图案锁定',8);
+      S.lw=label(S.wrongOne,'Wrong tile: 60% + stun','站错格：60% + 眩晕',3.4); S.lw.show=false;
+      S.lfray=label(dps[4],'Fraying: spreads within 5 yd','磨损：5 码内扩散',3.4); S.lfray.show=false;
+      if(S.rot){ S.lrot=label(new THREE.Vector3(0,0,0),'Turn the Loom: 90° CW','转动织机：顺时针 90°',1.2); S.lrot.show=false; } }
+    capEl.textContent=CAP[name][document.body.getAttribute('data-show')||'en'];
+  }
+  function phaseText(name,t){ var lang=document.body.getAttribute('data-show')||'en', ph=PH[name], out=ph[0][1]; for(var i=0;i<ph.length;i++){ if(t>=ph[i][0]) out=ph[i][1]; } return out[lang]||out.en; }
+  function hpText(name,t){ var r={p1:[100,70],inter:[70,70],p2:[70,35],p3:[35,0]}[name]; var v=r[0]+(r[1]-r[0])*Math.min(t/LOOP,1); return 'Boss '+Math.round(v)+'%'; }
+  function hpNum(name,t){ var r={p1:[100,70],inter:[70,70],p2:[70,35],p3:[35,0]}[name]; return r[0]+(r[1]-r[0])*Math.min(t/LOOP,1); }
+
+  function tick(dt){
+    T+=dt; if(T>LOOP){ build(cur); return; } var t=T;
+    if(cur==='p1'){
+      var swap=t>=6.5; S.lt[document.body.getAttribute('data-show')==='zh'?'zh':'en']; S.lt.en='Tank A · Shearing ×'+(swap?'3 · swapped out':(t>4?'3':'2')); S.lt.zh='坦克 A · 剪切 ×'+(swap?'3 · 已换下':(t>4?'3':'2')); S.lt2.en=swap?'Tank B · taunt':'Tank B'; S.lt2.zh=swap?'坦克 B · 嘲讽':'坦克 B';
+      if(swap){ tanks[0].userData.target.set(-9,0,-8); tanks[1].userData.target.set(0,0,-13); }
+      if(t>=4&&t<4.1) ring(boss.position,C.boss,4,0.8,{grow:2});
+      // tethers 2.5 -> break when 15 yd away
+      clearLines();
+      if(t>=2.5&&t<8){ S.tethered.forEach(function(r,i){ var d=r.position.distanceTo(boss.position); if(d<15){ r.userData.target.copy(r.position).sub(boss.position).setY(0).normalize().multiplyScalar(17).add(boss.position); line(new THREE.Vector3(boss.position.x,3,boss.position.z),new THREE.Vector3(r.position.x,1.2,r.position.z),C.boss); } else if(!r.userData.snapped){ r.userData.snapped=true; ring(r.position,C.boss,1.2,0.7,{grow:3}); } }); }
+      if(t>=8.5){ S.tethered.forEach(function(r){ r.userData.snapped=false; r.userData.target.copy(r.userData.home); }); }
+      // soak
+      if(t>=5&&t<10){ S.ls.show=true; if(t<5.1) ring(S.soak,C.boss,6,5,{opacity:0.6}); S.soakers.forEach(function(r,i){ r.userData.target.set(S.soak.x+Math.cos(i*2.1)*1.6,0,S.soak.z+Math.sin(i*2.1)*1.6); }); if(t>=8&&t<8.1){ ring(S.soak,C.raid,1,0.9,{grow:6}); } }
+      if(t>=10){ S.ls.show=false; S.soakers.forEach(function(r){ r.userData.target.copy(r.userData.home); }); }
+      // interrupt
+      if(t>=8.5&&t<10.5){ S.lk.en='Kicker · Weave Bolt interrupted'; S.lk.zh='打断者 · 织线之矢已打断'; if(t<8.6) ring(boss.position,C.raid,3,0.6,{grow:1}); } else { S.lk.en='Kicker'; S.lk.zh='打断者'; }
+    }
+    if(cur==='inter'){
+      // warp threads: 3..6 N->S (moving along z), 9..12 E->W
+      var lm=S.lineMesh, gm=S.gapMesh; lm.visible=false; gm.visible=false;
+      function sweep(t0,axis,gapPos){ var k=(t-t0)/3.5; if(k<-0.35||k>1) return; var p=-ARENA+(2*ARENA)*Math.max(k,0); lm.visible=true; gm.visible=true;
+        if(axis==='z'){ lm.rotation.y=0; lm.position.set(0,0.25,p); gm.rotation.y=0; gm.position.set(gapPos,0.3,p); } else { lm.rotation.y=Math.PI/2; lm.position.set(p,0.25,0); gm.rotation.y=Math.PI/2; gm.position.set(p,0.3,gapPos); }
+        lm.material.opacity=k<0?0.35+0.5*Math.abs(Math.sin(t*16)):0.9;
+        // raiders near the line move toward the gap
+        raid.forEach(function(r){ var c=axis==='z'?r.position.z:r.position.x; var o=axis==='z'?r.position.x:r.position.z; if(k>=0&&Math.abs(c-p)<7){ var tgt=r.userData.target; if(axis==='z'){ tgt.x=gapPos+(o>gapPos?2:-2); } else { tgt.z=gapPos+(o>gapPos?2:-2); } } }); }
+      sweep(3,'z',-8); sweep(9,'x',10);
+      if(t>=7&&t<10){ S.lroot.show=true; dps[3].userData.target.copy(dps[3].position); if(t<7.1) ring(dps[3].position,C.bad,1.2,3,{}); if(t>=9&&t<9.1) ring(dps[3].position,C.heal,1.2,0.8,{grow:2}); } else S.lroot.show=false;
+      if(t>=12){ S.adds.forEach(function(a){ a.visible=false; }); if(t<12.1) S.adds.forEach(function(a){ ring(a.position,C.boss,2,0.8,{grow:3}); }); }
+    }
+    if(cur==='p2'||cur==='p3'){
+      var show=S.rot?(t>=2&&t<6):(t<4), hidden=S.rot?(t>=6&&t<12):(t>=4&&t<10), resolve=S.rot?(t>=12):(t>=10);
+      setTiles(function(m){ var gx=m.userData.gx,gz=m.userData.gz; var isSafe=S.safe.some(function(p){ return p[0]===gx&&p[1]===gz; }); var isRes=S.resolveSafe.some(function(p){ return p[0]===gx&&p[1]===gz; });
+        if(show&&isSafe){ m.material.color.set(C.boss); m.material.opacity=0.55; } else if(resolve){ if(isRes){ m.material.color.set(C.raid); m.material.opacity=0.45; } else { m.material.color.set(C.bad); m.material.opacity=0.35; } } else { m.material.color.set(C.rule); m.material.opacity=0.18; } });
+      if(S.inner&&t<5){ edge.material.color.set(C.bad); }
+      var moveT=S.rot?6:4;
+      if(t>=moveT){ S.walkers.forEach(function(r,i){ var p=S.assign[i]; if(r===S.wrongOne&&S.rot){ p=S.safe[S.safe.length-1]; } if(r===S.wrongOne&&!S.rot){ p=[p[0]===5?4:p[0]+1,p[1]]; } var c=tileCenter(p[0],p[1]); var slot=Math.floor(i/S.resolveSafe.length); r.userData.target.set(c.x+(slot%2?1.6:-1.6),0,c.z+(slot>=2?1.6:-1.6)); }); }
+      if(S.rot&&t>=6&&t<9){ S.lrot.show=true; if(t<6.1) ring(new THREE.Vector3(0,0,0),C.boss,2,2.5,{grow:22,opacity:0.5}); } else if(S.rot){ S.lrot.show=false; }
+      var fT=S.rot?8:6; if(t>=fT&&t<fT+4){ S.lfray.show=true; if(t<fT+0.1) ring(dps[4].position,C.bad,2.5,1.2,{grow:1}); if(t>=fT+2&&t<fT+2.1){ raid.forEach(function(r){ if(r!==dps[4]&&r.position.distanceTo(dps[4].position)<5) ring(r.position,C.bad,1.2,0.9,{grow:1.5}); }); } } else S.lfray.show=false;
+      if(resolve){ S.wrongOne.userData.fail.visible=true; S.lw.show=true; if(t<(S.rot?12.1:10.1)) ring(S.wrongOne.position,C.bad,1,0.8,{grow:4}); }
+    }
+    phaseEl.textContent=phaseText(cur,t); var hv=hpNum(cur,t); hpFill.style.width=hv+'%'; hpVal.textContent=Math.round(hv)+'%';
+    moveAll(dt);
+  }
+
+  var drag=null;
+  stage.addEventListener('pointerdown',function(e){ drag={x:e.clientX,y:e.clientY,th:orbit.theta,ph:orbit.phi}; stage.setPointerCapture(e.pointerId); });
+  stage.addEventListener('pointermove',function(e){ if(!drag) return; orbit.theta=drag.th-(e.clientX-drag.x)*0.006; orbit.phi=Math.max(0.25,Math.min(1.3,drag.ph+(e.clientY-drag.y)*0.005)); placeCamera(); });
+  stage.addEventListener('pointerup',function(){ drag=null; }); stage.addEventListener('pointercancel',function(){ drag=null; });
+  function resize(){ var w=stage.clientWidth,h=stage.clientHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+  window.addEventListener('resize',resize);
+  new MutationObserver(function(){ if(cur) capEl.textContent=CAP[cur][document.body.getAttribute('data-show')||'en']; }).observe(document.body,{attributes:true,attributeFilter:['data-show']});
+  function retheme(){ readTheme(); bmat.color.set(C.boss); if(cur) build(cur); }
+  if(matchMedia('(prefers-color-scheme: dark)').addEventListener) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',retheme);
+  new MutationObserver(retheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  var visible=true,last=performance.now();
+  if('IntersectionObserver' in window){ new IntersectionObserver(function(en){ visible=en[0].isIntersecting; },{threshold:0.05}).observe(stage); }
+  function frame(now){ requestAnimationFrame(frame); var dt=Math.min((now-last)/1000,0.05); last=now; if(window.__hold){ renderer.render(scene,camera); return; } if(!visible||document.hidden) return; if(!drag){ orbit.theta+=dt*0.03; placeCamera(); } tick(dt); updateRings(dt); updateLabels(); renderer.render(scene,camera); }
+  resize(); build(document.body.getAttribute('data-ab')||'p1'); requestAnimationFrame(frame);
+  window.__demo={step:function(dt){ tick(dt); updateRings(dt); updateLabels(); renderer.render(scene,camera); },build:function(n){ build(n); }};
+  (function(){ var q=new URLSearchParams(location.search); var sh=q.get('shot'); if(!sh) return; if(q.get('lang')) document.body.setAttribute('data-show',q.get('lang')); if(q.get('theme')) document.documentElement.setAttribute('data-theme',q.get('theme')); document.body.classList.add('shot'); window.__select(sh); resize(); var tt=parseFloat(q.get('t')||'3'); for(var i=0;i<Math.round(tt*30);i++){ window.__demo.step(1/30); } window.__hold=true; })();
+})();
+</script>
+<script>
+(function(){
+  var $=function(s){ return document.querySelector(s); }, $$=function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  var L=function(){ return document.body.getAttribute('data-show')||'en'; };
+  var state={diff:'m',role:'all',tab:'p1',phase:'p1'};
+  var RANK={n:0,h:1,m:2};
+
+  /* ---------- timeline ---------- */
+  var AX=540, X0=170, X1=980;
+  function sx(t){ return X0+(t/AX)*(X1-X0); }
+  var PH=[{k:'p1',a:0,b:150,en:'Stage One',zh:'一阶段',sen:'100–70%',szh:'100–70%'},{k:'inter',a:150,b:195,en:'Intermission',zh:'过渡',sen:'45 sec',szh:'45 秒'},{k:'p2',a:195,b:360,en:'Stage Two',zh:'二阶段',sen:'70–35%',szh:'70–35%'},{k:'p3',a:360,b:510,en:'Stage Three',zh:'三阶段',sen:'35–0%',szh:'35–0%'}];
+  function every(a,b,step,off){ var r=[]; for(var t=a+off;t<b;t+=step) r.push(t); return r; }
+  function tracks(d){
+    var T=[], ss=[], sw=[];
+    [[0,150,{n:4,h:3,m:3}[d]],[195,360,{n:4,h:3,m:3}[d]],[360,510,{n:4,h:3,m:2}[d]]].forEach(function(seg){ var k=0; for(var t=seg[0]+4;t<seg[1];t+=8){ ss.push(t); k++; if(k%seg[2]===0) sw.push(t); } });
+    T.push({en:'Shearing Strike',zh:'剪切打击',roles:['tank'],cls:'tank',ticks:ss,big:sw});
+    T.push({en:'Weave Bolt',zh:'织线之矢',roles:['dps'],cls:'dps',ticks:every(0,150,12,6).concat(every(195,510,12,6))});
+    T.push({en:'Thread Snap',zh:'断线',roles:['heal','dps'],cls:'thread',ticks:every(0,150,25,12).concat(every(195,510,25,12))});
+    T.push({en:'Loose Spool',zh:'松散线轴',roles:['dps'],cls:'dps',ticks:every(0,150,30,17).concat(every(195,510,30,17))});
+    T.push({en:'Warp Threads',zh:'经线横扫',roles:['tank','heal','dps'],cls:'crimson',ticks:[153,161,169,177]});
+    T.push({en:d==='n'?'Spindles':'Spindles · Knot',zh:d==='n'?'纺锤':'纺锤 · 绳结',roles:['heal','dps'],cls:'heal',ticks:d==='n'?[]:every(150,195,10,6),marks:[{t:151,en:(d==='n'?2:3)+' adds',zh:(d==='n'?2:3)+' 个纺锤'}]});
+    T.push({en:'Pattern Lock',zh:'图案锁定',roles:['tank','heal','dps'],cls:'thread',blocks:every(195,360,40,10).map(function(t){ return {t:t,len:10}; }).concat(every(360,510,30,8).map(function(t){ return {t:t,len:10,rot:d==='m'}; }))});
+    T.push({en:'Fraying',zh:'磨损',roles:['heal'],cls:'crimson',ticks:(d==='m'?every(195,360,20,16):[]).concat(d==='n'?[]:every(360,510,20,14))});
+    if(d!=='n') T.push({en:'Arena Collapse',zh:'场地坍缩',roles:['tank','heal','dps'],cls:'crimson',blocks:[{t:360,len:5}],marks:[{t:367,en:d==='m'?'to 4×4':'to 5×5',zh:d==='m'?'缩至 4×4':'缩至 5×5'}]});
+    return T;
+  }
+  function drawTimeline(){
+    var d=state.diff, lang=L(), T=tracks(d), RH=28, TOP=6, PLOT=T.length*RH, H=TOP+PLOT+30;
+    var dn={n:{en:'Normal',zh:'普通'},h:{en:'Heroic',zh:'英雄'},m:{en:'Mythic',zh:'史诗'}}[d][lang];
+    var s='<svg viewBox="0 0 1000 '+H+'" role="img" aria-label="'+(lang==='zh'?dn+'难度施法时间轴':dn+' cast timeline')+'">';
+    PH.forEach(function(p,i){ s+='<rect x="'+sx(p.a)+'" y="'+TOP+'" width="'+(sx(p.b)-sx(p.a))+'" height="'+PLOT+'" class="band '+(i%2?'b2':'b1')+(state.phase===p.k?' sel':'')+'"/>'; });
+    for(var m=0;m<=9;m++){ var x=sx(m*60); s+='<line x1="'+x+'" x2="'+x+'" y1="'+TOP+'" y2="'+(TOP+PLOT)+'" class="grid"/><text x="'+x+'" y="'+(TOP+PLOT+19)+'" text-anchor="middle" class="axis">'+m+':00</text>'; }
+    T.forEach(function(tr,i){
+      var y=TOP+i*RH, cy=y+RH/2, dim=state.role!=='all'&&tr.roles.indexOf(state.role)<0;
+      s+='<g class="track '+tr.cls+(dim?' dim':'')+'">';
+      s+='<text x="'+(X0-12)+'" y="'+(cy+4.5)+'" text-anchor="end" class="tlabel">'+(lang==='zh'?tr.zh:tr.en)+'</text>';
+      s+='<line x1="'+X0+'" x2="'+X1+'" y1="'+cy+'" y2="'+cy+'" class="lane"/>';
+      (tr.ticks||[]).forEach(function(t){ s+='<rect x="'+(sx(t)-1)+'" y="'+(cy-6)+'" width="2" height="12" class="tick"/>'; });
+      (tr.big||[]).forEach(function(t){ s+='<rect x="'+(sx(t)-1.5)+'" y="'+(cy-11)+'" width="3" height="22" class="tick"/>'; });
+      (tr.blocks||[]).forEach(function(b){ var w=Math.max(3,sx(b.t+b.len)-sx(b.t)); s+='<rect x="'+sx(b.t)+'" y="'+(cy-7)+'" width="'+w+'" height="14" class="blk'+(b.rot?' rot':'')+'"/>'; if(b.rot) s+='<image href="assets/loom/flag-rotate.png" x="'+(sx(b.t)+w/2-6)+'" y="'+(cy-6)+'" width="12" height="12"/>'; });
+      (tr.marks||[]).forEach(function(mk){ s+='<text x="'+(sx(mk.t)+4)+'" y="'+(cy-8)+'" class="mark">'+(lang==='zh'?mk.zh:mk.en)+'</text>'; });
+      s+='</g>';
+    });
+    var bz={n:720,h:600,m:540}[d], bzl={n:'12:00',h:'10:00',m:'9:00'}[d];
+    if(bz<=AX){ s+='<line x1="'+sx(bz)+'" x2="'+sx(bz)+'" y1="'+(TOP-2)+'" y2="'+(TOP+PLOT)+'" class="bzline"/><text x="'+(sx(bz)-5)+'" y="'+(TOP+PLOT-6)+'" text-anchor="end" class="bztext">'+(lang==='zh'?'狂暴 ':'Berserk ')+bzl+'</text>'; }
+    else { s+='<text x="'+(X1-2)+'" y="'+(TOP+PLOT-6)+'" text-anchor="end" class="bztext">'+(lang==='zh'?'狂暴 ':'Berserk ')+bzl+' →</text>'; }
+    s+='</svg>';
+    $('#tl').innerHTML=s;
+  }
+  function buildPhaseRow(){
+    var row=$('#phaserow'), lang=L(); row.innerHTML='';
+    PH.forEach(function(p){ var b=document.createElement('button'); b.type='button'; b.className='phbtn'; b.setAttribute('data-phase',p.k);
+      b.style.left=(sx(p.a)/10)+'%'; b.style.width=((sx(p.b)-sx(p.a))/10)+'%';
+      b.innerHTML=(lang==='zh'?p.zh:p.en)+'<small>'+(lang==='zh'?p.szh:p.sen)+'</small>';
+      b.title=(lang==='zh'?'回放'+p.zh:'Replay '+p.en);
+      b.setAttribute('aria-pressed',p.k===state.phase?'true':'false');
+      b.addEventListener('click',function(){ setTab(p.k,true); });
+      row.appendChild(b); });
+  }
+
+  /* ---------- cheat sheet tabs ---------- */
+  var tabs=$$('.tab');
+  function setTab(name,focus){
+    state.tab=name;
+    tabs.forEach(function(t){ var on=t.getAttribute('data-tab')===name; t.setAttribute('aria-selected',on?'true':'false'); t.tabIndex=on?0:-1; if(on&&focus) t.focus({preventScroll:true}); });
+    var isTl=(name==='timeline');
+    $('#timelineBlock').hidden=!isTl; $('#replayBlock').hidden=isTl;
+    if(!isTl){ state.phase=name; if(window.__select) window.__select(name); requestAnimationFrame(function(){ window.dispatchEvent(new Event('resize')); }); }
+    $$('.phbtn').forEach(function(b){ b.setAttribute('aria-pressed',b.getAttribute('data-phase')===state.phase?'true':'false'); });
+    drawTimeline();
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){ setTab(t.getAttribute('data-tab'),false); });
+    t.addEventListener('keydown',function(e){ var j=-1; if(e.key==='ArrowRight') j=(i+1)%tabs.length; else if(e.key==='ArrowLeft') j=(i-1+tabs.length)%tabs.length; else if(e.key==='Home') j=0; else if(e.key==='End') j=tabs.length-1; if(j>=0){ e.preventDefault(); setTab(tabs[j].getAttribute('data-tab'),true); } });
+  });
+  var stageEl=$('#stage'); if(stageEl) stageEl.addEventListener('keydown',function(e){ var ks=PH.map(function(p){ return p.k; }), i=ks.indexOf(state.phase); if(e.key==='ArrowRight'){ setTab(ks[(i+1)%ks.length]); e.preventDefault(); } else if(e.key==='ArrowLeft'){ setTab(ks[(i-1+ks.length)%ks.length]); e.preventDefault(); } });
+
+  /* ---------- Pattern Lock mini game ---------- */
+  var game=(function(){
+    var gridEl=$('#grid6'), bar=$('#pbarFill'), status=$('#pstatus'), bStart=$('#pStart'), bTight=$('#pTighten');
+    var safe=new Set(), picked=new Set(), phase='idle', raf=0, t0=0, timing={show:4,hide:6}, tiles=[];
+    for(var i=0;i<36;i++){ (function(i){ var b=document.createElement('button'); b.type='button'; b.className='tile'; var v=(i*5+Math.floor(i/6)*3)%8; b.style.setProperty('--sx',((v%4)*100/3)+'%'); b.style.setProperty('--sy',(Math.floor(v/4)*100)+'%'); b.addEventListener('click',function(){ pick(i); }); gridEl.appendChild(b); tiles.push(b); })(i); }
+    function now(){ return performance.now()/1000; }
+    function timingFor(d){ return {n:{show:0,hide:10},h:{show:6,hide:4},m:{show:4,hide:6}}[d]; }
+    function gen(){ var cells=new Set(), shapes=0, guard=0;
+      while(shapes<4&&guard++<500){ var s0=Math.floor(Math.random()*36); if(cells.has(s0)) continue; var shape=[s0];
+        while(shape.length<3){ var nb=[]; shape.forEach(function(c){ var r=Math.floor(c/6), q=c%6; [[r-1,q],[r+1,q],[r,q-1],[r,q+1]].forEach(function(p){ if(p[0]>=0&&p[0]<6&&p[1]>=0&&p[1]<6){ var n=p[0]*6+p[1]; if(!cells.has(n)&&shape.indexOf(n)<0&&nb.indexOf(n)<0) nb.push(n); } }); }); if(!nb.length) break; shape.push(nb[Math.floor(Math.random()*nb.length)]); }
+        if(shape.length===3){ shape.forEach(function(c){ cells.add(c); }); shapes++; } }
+      return cells; }
+    function paint(){ var zh=L()==='zh';
+      tiles.forEach(function(b,i){ b.className='tile'; var isSafe=safe.has(i), isPick=picked.has(i);
+        if(phase==='idle'||phase==='show'){ if(isSafe) b.classList.add('lit'); }
+        else if(phase==='hide'){ if(state.diff==='n'&&isSafe) b.classList.add('lit'); if(isPick) b.classList.add('picked'); }
+        else if(phase==='done'){ if(isSafe&&isPick) b.classList.add('ok'); else if(isPick) b.classList.add('bad'); else if(isSafe) b.classList.add('miss'); }
+        b.disabled=(phase!=='hide');
+        b.setAttribute('aria-pressed',isPick?'true':'false');
+        b.setAttribute('aria-label',zh?('第 '+(Math.floor(i/6)+1)+' 行 第 '+(i%6+1)+' 列'):('Row '+(Math.floor(i/6)+1)+', column '+(i%6+1))); }); }
+    function setStatus(){ var zh=L()==='zh', s='', e=now()-t0;
+      if(phase==='idle') s=state.diff==='n'?(zh?'普通难度下图案全程可见。开怪后点出 12 个安全格。':'On Normal the pattern stays visible. Start the pull and pick the 12 safe tiles.'):(zh?'记住 12 个安全格。开怪后图案熄灭，凭记忆点出来。':'Memorize the 12 safe tiles. After the pull starts they go dark; pick them from memory.');
+      if(phase==='show') s=(zh?'记忆中，':'Memorize: ')+Math.max(0,timing.show-e).toFixed(1)+(zh?' 秒':' sec');
+      if(phase==='hide') s=(zh?'站位中，':'Move: ')+Math.max(0,timing.show+timing.hide-e).toFixed(1)+(zh?' 秒，已选 ':' sec, picked ')+picked.size+'/12';
+      if(phase==='done'){ var ok=0,bad=0; picked.forEach(function(i){ if(safe.has(i)) ok++; else bad++; });
+        s=zh?('收紧：找对 '+ok+'/12，站错 '+bad+' 格。'+(ok===12&&bad===0?'全团存活。':'')):('Tighten: '+ok+'/12 found, '+bad+' wrong '+(bad===1?'tile':'tiles')+'.'+(ok===12&&bad===0?' Clean pull.':'')); }
+      status.textContent=s;
+      bStart.textContent=phase==='done'?(zh?'下一次':'Next pull'):(zh?'开怪':'Start pull');
+      bStart.hidden=(phase==='show'||phase==='hide');
+      bTight.hidden=(phase!=='hide');
+      bTight.textContent=zh?'立即收紧':'Tighten now'; }
+    function loop(){ var e=now()-t0, total=timing.show+timing.hide;
+      if(phase==='show'&&e>=timing.show){ phase='hide'; paint(); }
+      if(phase==='hide'&&e>=total){ resolve(); return; }
+      bar.style.transform='scaleX('+Math.max(0,1-e/total)+')';
+      setStatus(); raf=requestAnimationFrame(loop); }
+    function start(){ if(phase==='done'||safe.size===0) safe=gen(); picked=new Set(); timing=timingFor(state.diff); phase=timing.show>0?'show':'hide'; t0=now(); paint(); cancelAnimationFrame(raf); raf=requestAnimationFrame(loop); }
+    function resolve(){ cancelAnimationFrame(raf); phase='done'; bar.style.transform='scaleX(0)'; paint(); setStatus(); bStart.focus({preventScroll:true}); }
+    function pick(i){ if(phase!=='hide') return; if(picked.has(i)) picked.delete(i); else if(picked.size<12) picked.add(i); paint(); setStatus(); }
+    function reset(){ cancelAnimationFrame(raf); safe=gen(); picked=new Set(); phase='idle'; timing=timingFor(state.diff); bar.style.transform='scaleX(1)'; paint(); setStatus(); }
+    bStart.addEventListener('click',start); bTight.addEventListener('click',resolve);
+    return {reset:reset, relabel:function(){ paint(); setStatus(); }};
+  })();
+
+  /* ---------- difficulty, role, contents ---------- */
+  function applyDiff(){
+    $$('.dv').forEach(function(el){ var v=el.getAttribute('data-'+state.diff); if(v!==null) el.textContent=v; });
+    $$('[data-min]').forEach(function(el){ el.classList.toggle('absent',RANK[state.diff]<RANK[el.getAttribute('data-min')]); });
+    $$('[data-diff]').forEach(function(b){ b.setAttribute('aria-pressed',b.getAttribute('data-diff')===state.diff?'true':'false'); });
+    drawTimeline(); game.reset();
+  }
+  function applyRole(){
+    $$('.ab[data-roles]').forEach(function(el){ var rs=el.getAttribute('data-roles').split(','); el.classList.toggle('dim',state.role!=='all'&&rs.indexOf(state.role)<0); });
+    $$('.rolegrp[data-rolecol]').forEach(function(el){ el.classList.toggle('dim',state.role!=='all'&&el.getAttribute('data-rolecol')!==state.role); });
+    $$('[data-role]').forEach(function(b){ b.setAttribute('aria-pressed',b.getAttribute('data-role')===state.role?'true':'false'); });
+    drawTimeline();
+  }
+  $$('[data-diff]').forEach(function(b){ b.addEventListener('click',function(){ state.diff=b.getAttribute('data-diff'); applyDiff(); }); });
+  $$('[data-role]').forEach(function(b){ b.addEventListener('click',function(){ state.role=b.getAttribute('data-role'); applyRole(); }); });
+  var tocBtn=$('#tocToggle'); tocBtn.addEventListener('click',function(){ var open=tocBtn.getAttribute('aria-expanded')==='true'; $('#tocList').hidden=open; tocBtn.setAttribute('aria-expanded',open?'false':'true'); tocBtn.innerHTML=open?'<span data-lang="en">show</span><span data-lang="zh">显示</span>':'<span data-lang="en">hide</span><span data-lang="zh">隐藏</span>'; });
+  if('IntersectionObserver' in window){
+    var links=$$('.nbox a[data-sec]');
+    var io=new IntersectionObserver(function(entries){ entries.forEach(function(en){ if(en.isIntersecting){ links.forEach(function(a){ a.setAttribute('aria-current',a.getAttribute('data-sec')===en.target.id?'true':'false'); }); } }); },{rootMargin:'-45% 0px -50% 0px'});
+    ['adventure','overview','abilities','cheatsheet'].forEach(function(id){ var el=document.getElementById(id); if(el) io.observe(el); });
+  }
+
+  /* ---------- language ---------- */
+  var langBtns=$$('.lang button');
+  function applyLang(lang,save){
+    document.body.setAttribute('data-show',lang);
+    langBtns.forEach(function(b){ b.setAttribute('aria-pressed',b.getAttribute('data-set')===lang?'true':'false'); });
+    document.title=lang==='zh'?'织机守卫遭遇战':'Loom-Warden Encounter';
+    document.documentElement.lang=lang==='zh'?'zh-CN':'en';
+    if(save){ try{ localStorage.setItem('loom-lang',lang); }catch(e){} }
+    buildPhaseRow(); drawTimeline(); game.relabel();
+  }
+  langBtns.forEach(function(b){ b.addEventListener('click',function(){ applyLang(b.getAttribute('data-set'),true); }); });
+
+  applyLang(L(),false); applyDiff(); applyRole();
+})();
+</script>

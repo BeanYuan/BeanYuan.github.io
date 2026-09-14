@@ -105,6 +105,34 @@
         },
         "p0.link": { en: "Open the interactive spec", zh: "打开交互式方案" },
 
+        // p7 Vael'thar — WoW raid encounter
+        "p7.kind": { en: "WoW Raid Encounter · Design Spec", zh: "魔兽团本遭遇战 · 设计方案" },
+        "p7.dd.role": { en: "Encounter Designer (solo)", zh: "遭遇战策划（独立完成）" },
+        "p7.dd.format": { en: "Wiki-style spec · EN / 中文 · playable mechanic · 3D replay", zh: "维基式方案 · 中英双语 · 可玩机制 · 3D 回放" },
+        "p7.dd.type": { en: "World of Warcraft raid boss concept (fan design, 2026)", zh: "魔兽世界团本首领概念（同人设计，2026）" },
+        "p7.desc": {
+            en: "A 20-player raid boss built on a memory mechanic: the floor shows a pattern, hides it, and resolves on it seconds later. Three stages and an intermission, with difficulty-aware values, role filters, a cast timeline, a playable Pattern Lock grid and a 3D replay of every stage.",
+            zh: "一个 20 人团本首领，核心是记忆机制：地板显示图案、隐藏，几秒后按它结算。三个阶段加一个过渡，数值随难度切换，可按职责筛选，附施法时间轴、可玩的图案锁定网格，以及每个阶段的 3D 回放。"
+        },
+        "p7.gcap": { en: "The encounter page and 3D replays of Stage Two, the intermission and Stage Three.", zh: "遭遇战页面，以及二阶段、过渡阶段和三阶段的 3D 回放。" },
+        "p7.design1": {
+            en: "Pattern Lock: twelve safe tiles are shown for 4 s and hidden for 6 s, then Tighten hits every player off a safe tile for 60% and a stun.",
+            zh: "图案锁定：12 个安全格显示 4 秒、隐藏 6 秒，随后收紧对所有没站在安全格上的玩家造成 60% 伤害并眩晕。"
+        },
+        "p7.design2": {
+            en: "Stage One layers a tether, a soak and an interrupt so each ability pulls the raid in a different direction.",
+            zh: "一阶段叠加连线、分摊和打断，每个技能把全团往不同方向拉。"
+        },
+        "p7.design3": {
+            en: "Intermission: sweeping threads with a single gap while Spindles must die in 45 s; on Heroic and Mythic their Knot roots players until dispelled.",
+            zh: "过渡阶段：只有一个缺口的横扫丝线，同时 45 秒内要击杀纺锤；英雄与史诗下纺锤的绳结会定身玩家，直到被驱散。"
+        },
+        "p7.design4": {
+            en: "Stage Three shrinks the grid (5×5 Heroic, 4×4 Mythic) and, on Mythic, rotates the hidden pattern 90° before it resolves.",
+            zh: "三阶段网格缩小（英雄 5×5，史诗 4×4），史诗难度下隐藏的图案在结算前旋转 90°。"
+        },
+        "p7.link": { en: "Open the encounter page", zh: "打开遭遇战页面" },
+
         // shared — detail headings
         "detail.design": { en: "Design & Planning", zh: "策划与设计" },
         "detail.dev": { en: "Development", zh: "开发" },
@@ -375,9 +403,9 @@
         }
 
         // sub-pages that carry their own EN/ZH toggle follow the site language via the URL hash
-        var subLinks = document.querySelectorAll('a[href^="valorant-agent-hush.html"]');
+        var subLinks = document.querySelectorAll('a[href^="valorant-agent-hush.html"], a[href^="wow-encounter-loomwarden.html"]');
         for (var k = 0; k < subLinks.length; k++) {
-            subLinks[k].setAttribute("href", "valorant-agent-hush.html#" + lang);
+            subLinks[k].setAttribute("href", subLinks[k].getAttribute("href").split("#")[0] + "#" + lang);
         }
 
         var toggle = document.querySelector(".lang-toggle");

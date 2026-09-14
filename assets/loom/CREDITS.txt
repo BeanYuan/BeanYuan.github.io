@@ -1,0 +1,9 @@
+Loom-Warden page assets
+
+Spell icons: "Painterly Spell Icons" parts 1-4 by J. W. Bjerk (eleazzaar), CC-BY 3.0
+  https://opengameart.org/content/painterly-spell-icons-part-1  (resized to 64 px)
+Flag and role icons: game-icons.net, CC-BY 3.0
+  lorc: hazard-sign, skull-crossed-bones, interdiction, magic-swirl, crossed-swords, checked-shield
+  zeromancer: heart-plus; delapouite: clockwise-rotation  (recoloured, outlined)
+Textures: ambientCG.com, CC0 - Leather026, Leather027, Tiles140, Tiles144 (cropped, darkened, tinted)
+UI frames, divider, bars, buttons: Kenney.nl, CC0 - Fantasy UI Borders, UI Pack RPG Expansion (recoloured)
