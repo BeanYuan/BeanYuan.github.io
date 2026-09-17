@@ -104,6 +104,7 @@
             zh: "X · 安魂曲：12 米圆盘穿墙推进 30 米，盘内敌人每一次移动都冒涟漪。"
         },
         "p0.link": { en: "Open the interactive spec", zh: "打开交互式方案" },
+        "link.process": { en: "Development process", zh: "开发过程" },
 
         // p7 Vael'thar — WoW raid encounter
         "p7.kind": { en: "WoW Raid Encounter · Design Spec", zh: "魔兽团本遭遇战 · 设计方案" },
@@ -403,7 +404,7 @@
         }
 
         // sub-pages that carry their own EN/ZH toggle follow the site language via the URL hash
-        var subLinks = document.querySelectorAll('a[href^="valorant-agent-hush.html"], a[href^="wow-encounter-loomwarden.html"]');
+        var subLinks = document.querySelectorAll('a[href^="valorant-agent-hush.html"], a[href^="wow-encounter-loomwarden.html"], a[href^="dev-"]');
         for (var k = 0; k < subLinks.length; k++) {
             subLinks[k].setAttribute("href", subLinks[k].getAttribute("href").split("#")[0] + "#" + lang);
         }
