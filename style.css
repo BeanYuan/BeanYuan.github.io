@@ -455,6 +455,13 @@ a {
     color: var(--text-faint);
 }
 
+.title-note {
+    font-weight: 400;
+    font-size: 0.62em;
+    letter-spacing: 0.02em;
+    color: var(--text-faint);
+}
+
 /* screenshot gallery */
 .project-gallery {
     display: grid;

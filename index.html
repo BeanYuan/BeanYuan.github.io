@@ -227,7 +227,79 @@
                     </div>
                 </article>
 
-                <!-- 03 Witcher 3 in Minecraft -->
+                <!-- 03 MC Project -->
+                <article class="project reveal" data-key="p8" data-tags="design,programming,indev">
+                    <div class="project-visual">
+                        <img src="assets/projects/mcproject.webp"
+                             alt="MC Project (working title) — first-person action MMORPG design page"
+                             loading="lazy" />
+                    </div>
+                    <div class="project-grid">
+                        <aside class="project-aside">
+                            <span class="project-index">03</span>
+                            <dl class="project-meta">
+                                <dt data-i18n="meta.role">Role</dt>
+                                <dd data-i18n="p8.dd.role">Lead Game Designer · Systems &amp; Level Design · Server Programming</dd>
+                                <dt data-i18n="meta.team">Team</dt>
+                                <dd data-i18n="p8.dd.team">3 people · May 2026 – present</dd>
+                                <dt data-i18n="meta.type">Type</dt>
+                                <dd data-i18n="p8.dd.type">MMORPG in development · Minecraft Java 1.21.1 · TeaEngine</dd>
+                            </dl>
+                        </aside>
+                        <div class="project-main">
+                            <h2 class="project-title">MC Project <span class="title-note" data-i18n="p8.note">(working title)</span></h2>
+                            <p class="project-kind" data-i18n="p8.kind">First-person Action MMORPG · Systems &amp; Level Design</p>
+                            <p class="project-desc" data-i18n="p8.desc">
+                                A first-person action MMORPG on a Minecraft server: Albion Online’s zone risk and
+                                player economy, World of Warcraft’s dungeons and bosses, and a combat system that
+                                resolves every hit against the target’s skeleton. Fifty-six linked design pages
+                                are the source of truth, and the build follows them.
+                            </p>
+
+                            <figure class="project-gallery">
+                                <img src="assets/projects/mcproject-hud.webp"
+                                     alt="In-game first-person HUD with the skill bar and target frame"
+                                     loading="lazy" />
+                                <img src="assets/projects/mcproject-map.webp"
+                                     alt="Zone map with safe, yellow, red and black territory"
+                                     loading="lazy" />
+                                <img src="assets/projects/mcproject-boss.webp"
+                                     alt="Dungeon boss model turnaround"
+                                     loading="lazy" />
+                                <img src="assets/projects/mcproject-pm.webp"
+                                     alt="Art requirement board on the internal design site"
+                                     loading="lazy" />
+                                <figcaption data-i18n="p8.gcap">In-game HUD, the zone map, a dungeon boss turnaround, and the art requirement board on the design site.</figcaption>
+                            </figure>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.design">Design &amp; Planning</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p8.design1">Zone and economy design after Albion Online: safe, yellow, red and black territory with full-loot risk, a player-run market, and gathering-to-crafting loops that keep every tier in demand.</li>
+                                    <li data-i18n="p8.design2">Seven scripted dungeons plus a procedural rift mode assembled from 28 room templates, each with its own tier, group size and boss mechanics.</li>
+                                    <li data-i18n="p8.design3">D1, the first five-player dungeon, is built on one sentence — walk 270° around the sunken yard, then drop into it from above. About 170 blocks of main path, four trap types and eight encounters, delivered as a 3D whitebox and a layered top-down plan.</li>
+                                    <li data-i18n="p8.design4">Classes and growth run on 18 reusable skill atoms, so a new ability is a config entry rather than new code; 113 monster entries and 706 item entries share the same spec tables.</li>
+                                </ul>
+                            </div>
+
+                            <div class="detail-block">
+                                <h3 class="detail-h" data-i18n="detail.dev">Development</h3>
+                                <ul class="detail-list">
+                                    <li data-i18n="p8.dev1">Combat runs in TeaEngine, our own Fabric 1.21.1 engine mod: the client measures and reports, the server owns every rule and computes each result in memory.</li>
+                                    <li data-i18n="p8.dev2">Hits resolve against the target’s skeleton — per-bone hit boxes with part multipliers and swing-segment multipliers feeding one damage formula.</li>
+                                    <li data-i18n="p8.dev3">Spring Boot, PostgreSQL and Redis behind the game server, with session-ownership tokens that stop item duplication across instances.</li>
+                                    <li data-i18n="p8.dev4">A web editor with embedded Blockbench and save-to-game hot reload, and a validate-then-apply config loader that abandons a whole reload on a single bad entry.</li>
+                                </ul>
+                            </div>
+
+                            <div class="project-links">
+                                <a class="link" href="codemc-mmorpg.html" target="_blank" rel="noopener" data-i18n="p8.link">Open the project page</a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 04 Witcher 3 in Minecraft -->
                 <article class="project reveal" data-key="p1" data-tags="design,programming,shipped">
                     <div class="project-visual">
                         <img src="assets/projects/witcher.webp"
@@ -236,12 +308,12 @@
                     </div>
                     <div class="project-grid">
                         <aside class="project-aside">
-                            <span class="project-index">03</span>
+                            <span class="project-index">04</span>
                             <dl class="project-meta">
                                 <dt data-i18n="meta.role">Role</dt>
                                 <dd data-i18n="p1.dd.role">Producer / Java Main Programmer / Designer</dd>
                                 <dt data-i18n="meta.team">Team</dt>
-                                <dd data-i18n="p1.dd.team">11 people — art, programming, design, marketing</dd>
+                                <dd data-i18n="p1.dd.team">Team grew to ~15 — art, programming, design, marketing</dd>
                                 <dt data-i18n="meta.type">Type</dt>
                                 <dd data-i18n="p1.dd.type">Long-term personal studio project</dd>
                             </dl>
@@ -293,7 +365,7 @@
                     </div>
                 </article>
 
-                <!-- 04 TurretCoop -->
+                <!-- 05 TurretCoop -->
                 <article class="project reveal" data-key="p2" data-tags="design,programming,indev">
                     <div class="project-visual">
                         <img src="assets/projects/turretcoop.webp"
@@ -302,7 +374,7 @@
                     </div>
                     <div class="project-grid">
                         <aside class="project-aside">
-                            <span class="project-index">04</span>
+                            <span class="project-index">05</span>
                             <dl class="project-meta">
                                 <dt data-i18n="meta.role">Role</dt>
                                 <dd data-i18n="p2.dd.role">Designer / Programmer</dd>
@@ -363,7 +435,7 @@
                     </div>
                 </article>
 
-                <!-- 05 Demons & Knights -->
+                <!-- 06 Demons & Knights -->
                 <article class="project reveal" data-key="p3" data-tags="design,programming,shipped">
                     <div class="project-visual">
                         <img src="assets/projects/demons-knights.webp"
@@ -372,7 +444,7 @@
                     </div>
                     <div class="project-grid">
                         <aside class="project-aside">
-                            <span class="project-index">05</span>
+                            <span class="project-index">06</span>
                             <dl class="project-meta">
                                 <dt data-i18n="meta.role">Role</dt>
                                 <dd data-i18n="p3.dd.role">Designer / Unity Programmer</dd>
@@ -421,7 +493,7 @@
                     </div>
                 </article>
 
-                <!-- 06 Flux -->
+                <!-- 07 Flux -->
                 <article class="project reveal" data-key="p4" data-tags="design,programming,shipped">
                     <div class="project-visual">
                         <img src="assets/projects/flux.webp"
@@ -430,7 +502,7 @@
                     </div>
                     <div class="project-grid">
                         <aside class="project-aside">
-                            <span class="project-index">06</span>
+                            <span class="project-index">07</span>
                             <dl class="project-meta">
                                 <dt data-i18n="meta.role">Role</dt>
                                 <dd data-i18n="p4.dd.role">Designer / Unity Programmer</dd>
@@ -472,7 +544,7 @@
                     </div>
                 </article>
 
-                <!-- 07 Scrollscape -->
+                <!-- 08 Scrollscape -->
                 <article class="project reveal" data-key="p5" data-tags="programming,design,shipped">
                     <div class="project-visual">
                         <img src="assets/projects/scrollscape.webp"
@@ -481,7 +553,7 @@
                     </div>
                     <div class="project-grid">
                         <aside class="project-aside">
-                            <span class="project-index">07</span>
+                            <span class="project-index">08</span>
                             <dl class="project-meta">
                                 <dt data-i18n="meta.role">Role</dt>
                                 <dd data-i18n="p5.dd.role">Unity Developer / Systems Designer</dd>
@@ -531,7 +603,7 @@
                     </div>
                 </article>
 
-                <!-- 08 VR Experiment -->
+                <!-- 09 VR Experiment -->
                 <article class="project reveal" data-key="p6" data-tags="research,programming,indev">
                     <div class="project-visual">
                         <img src="assets/projects/vr.webp"
@@ -540,7 +612,7 @@
                     </div>
                     <div class="project-grid">
                         <aside class="project-aside">
-                            <span class="project-index">08</span>
+                            <span class="project-index">09</span>
                             <dl class="project-meta">
                                 <dt data-i18n="meta.role">Role</dt>
                                 <dd data-i18n="p6.dd.role">Experiment Designer / Unity Developer</dd>

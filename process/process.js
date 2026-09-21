@@ -1,3 +1,58 @@
+/* Shared lightbox: click any figure image to open it in place. Arrow keys / buttons step through
+   every image on the page, Esc or a click on the backdrop closes. Links around images are intercepted
+   so they still work without JS. */
+(function () {
+  if (window.__lbx) return; window.__lbx = 1;
+
+  var box = document.createElement('div');
+  box.className = 'lbx'; box.hidden = true;
+  box.innerHTML = '<button class="lbx-x" type="button" aria-label="Close">&times;</button>'
+    + '<button class="lbx-nav lbx-prev" type="button" aria-label="Previous">&#8249;</button>'
+    + '<button class="lbx-nav lbx-next" type="button" aria-label="Next">&#8250;</button>'
+    + '<figure class="lbx-fig"><img alt=""><figcaption><span class="lbx-cap"></span><span class="lbx-n"></span></figcaption></figure>';
+  document.body.appendChild(box);
+  var img = box.querySelector('img'), cap = box.querySelector('.lbx-cap'), num = box.querySelector('.lbx-n');
+  var items = [], at = -1;
+
+  function collect() {
+    items = [].slice.call(document.querySelectorAll('figure img')).filter(function (el) {
+      return el.offsetParent !== null;   // only what is on the visible tab
+    });
+  }
+  function full(el) {
+    var a = el.closest('a[href]');
+    return (a && /\.(webp|png|jpe?g|gif|svg)$/i.test(a.getAttribute('href'))) ? a.getAttribute('href') : el.currentSrc || el.src;
+  }
+  function show(i) {
+    if (!items.length) return;
+    at = (i + items.length) % items.length;
+    var el = items[at], fc = el.closest('figure') && el.closest('figure').querySelector('figcaption');
+    img.src = full(el); img.alt = el.alt || '';
+    cap.innerHTML = fc ? fc.innerHTML : '';
+    num.textContent = items.length > 1 ? (at + 1) + ' / ' + items.length : '';
+    box.querySelectorAll('.lbx-nav').forEach(function (b) { b.hidden = items.length < 2; });
+  }
+  function open(el) {
+    collect(); var i = items.indexOf(el); if (i < 0) { items = [el]; i = 0; }
+    box.hidden = false; document.documentElement.style.overflow = 'hidden'; show(i);
+  }
+  function close() { box.hidden = true; document.documentElement.style.overflow = ''; img.src = ''; }
+
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('figure img');
+    if (el) { e.preventDefault(); open(el); return; }
+    if (e.target === box || e.target.closest('.lbx-x')) { close(); return; }
+    var nav = e.target.closest('.lbx-nav');
+    if (nav) { e.stopPropagation(); show(at + (nav.classList.contains('lbx-next') ? 1 : -1)); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (box.hidden) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowRight') show(at + 1);
+    else if (e.key === 'ArrowLeft') show(at - 1);
+  });
+})();
+
 (function(){
   var LANG_KEY='lizhuoyuan_lang', THEME_KEY='lizhuoyuan_theme_v2', root=document.documentElement;
 

@@ -134,6 +134,72 @@
         },
         "p7.link": { en: "Open the encounter page", zh: "打开遭遇战页面" },
 
+        // MC Project
+        "p8.kind": {
+            en: "First-person Action MMORPG · Systems & Level Design",
+            zh: "第一人称动作 MMORPG · 系统与关卡设计"
+        },
+        "p8.note": {
+            en: "(working title)",
+            zh: "（名称未定）"
+        },
+        "p8.dd.role": {
+            en: "Lead Game Designer · Systems & Level Design · Server Programming",
+            zh: "主策划 · 系统与关卡设计 · 服务端程序"
+        },
+        "p8.dd.team": {
+            en: "3 people · May 2026 – present",
+            zh: "3 人 · 2026.05 至今"
+        },
+        "p8.dd.type": {
+            en: "MMORPG in development · Minecraft Java 1.21.1 · TeaEngine",
+            zh: "研发中的 MMORPG · Minecraft Java 1.21.1 · TeaEngine"
+        },
+        "p8.desc": {
+            en: "A first-person action MMORPG on a Minecraft server: Albion Online’s zone risk and player economy, World of Warcraft’s dungeons and bosses, and a combat system that resolves every hit against the target’s skeleton. Fifty-six linked design pages are the source of truth, and the build follows them.",
+            zh: "建立在 Minecraft 服务端上的第一人称动作 MMORPG：阿尔比恩式的分区风险与玩家经济，魔兽式的副本与首领，以及一套把每一次命中都判定到目标骨骼上的战斗系统。56 个互相链接的策划页是唯一事实来源，开发按页推进。"
+        },
+        "p8.gcap": {
+            en: "In-game HUD, the zone map, a dungeon boss turnaround, and the art requirement board on the design site.",
+            zh: "游戏内 HUD、分区地图、副本首领三视图，以及策划站上的美术需求看板。"
+        },
+        "p8.design1": {
+            en: "Zone and economy design after Albion Online: safe, yellow, red and black territory with full-loot risk, a player-run market, and gathering-to-crafting loops that keep every tier in demand.",
+            zh: "参考阿尔比恩的分区与经济设计：安全区、黄区、红区、黑区四档掉落风险，玩家自运营市场，采集到制作的闭环让每个层级的材料都有人要。"
+        },
+        "p8.design2": {
+            en: "Seven scripted dungeons plus a procedural rift mode assembled from 28 room templates, each with its own tier, group size and boss mechanics.",
+            zh: "7 个固定副本，外加一套用 28 个房间模板拼装的随机裂隙模式，各自有等级档位、人数配置和首领机制。"
+        },
+        "p8.design3": {
+            en: "D1, the first five-player dungeon, is built on one sentence — walk 270° around the sunken yard, then drop into it from above. About 170 blocks of main path, four trap types and eight encounters, delivered as a 3D whitebox and a layered top-down plan.",
+            zh: "D1 是第一个 5 人副本，整张图只服从一句话：绕下沉庭院走 270°，再从上方跳进去。主路径约 170 格，4 种陷阱、8 场遭遇战，交付物是 3D 白盒和分层俯视图。"
+        },
+        "p8.design4": {
+            en: "Classes and growth run on 18 reusable skill atoms, so a new ability is a config entry rather than new code; 113 monster entries and 706 item entries share the same spec tables.",
+            zh: "职业与成长建立在 18 种可复用的技能原子上，新技能是一条配置而不是一段新代码；113 条怪物词条和 706 条物品词条共用同一套数值表。"
+        },
+        "p8.dev1": {
+            en: "Combat runs in TeaEngine, our own Fabric 1.21.1 engine mod: the client measures and reports, the server owns every rule and computes each result in memory.",
+            zh: "战斗跑在我们自研的引擎模组 TeaEngine（Fabric 1.21.1）里：客户端只负责测量和上报，规则和结算全部在服务端内存中完成。"
+        },
+        "p8.dev2": {
+            en: "Hits resolve against the target’s skeleton — per-bone hit boxes with part multipliers and swing-segment multipliers feeding one damage formula.",
+            zh: "命中判定打在目标骨骼上——逐骨骼判定盒，部位倍率和挥砍分段倍率一起进入同一条伤害公式。"
+        },
+        "p8.dev3": {
+            en: "Spring Boot, PostgreSQL and Redis behind the game server, with session-ownership tokens that stop item duplication across instances.",
+            zh: "游戏服务端背后是 Spring Boot + PostgreSQL + Redis，用会话归属令牌杜绝跨实例刷物品。"
+        },
+        "p8.dev4": {
+            en: "A web editor with embedded Blockbench and save-to-game hot reload, and a validate-then-apply config loader that abandons a whole reload on a single bad entry.",
+            zh: "一个内嵌 Blockbench 的网页编辑器，保存即热更进游戏；配置加载器先全量校验再应用，一条出错就整批放弃。"
+        },
+        "p8.link": {
+            en: "Open the project page",
+            zh: "打开项目页面"
+        },
+
         // shared — detail headings
         "detail.design": { en: "Design & Planning", zh: "策划与设计" },
         "detail.dev": { en: "Development", zh: "开发" },
@@ -163,8 +229,8 @@
             zh: "制作人 / Java 主程 / 设计"
         },
         "p1.dd.team": {
-            en: "11 people — art, programming, design, marketing",
-            zh: "11 人 —— 美术、程序、策划、市场"
+            en: "Team grew to ~15 — art, programming, design, marketing",
+            zh: "团队最多约 15 人 —— 美术、程序、策划、市场"
         },
         "p1.dd.type": {
             en: "Long-term personal studio project",
@@ -404,7 +470,7 @@
         }
 
         // sub-pages that carry their own EN/ZH toggle follow the site language via the URL hash
-        var subLinks = document.querySelectorAll('a[href^="valorant-agent-hush.html"], a[href^="wow-encounter-loomwarden.html"], a[href^="dev-"]');
+        var subLinks = document.querySelectorAll('a[href^="valorant-agent-hush.html"], a[href^="wow-encounter-loomwarden.html"], a[href^="dev-"], a[href^="codemc-"]');
         for (var k = 0; k < subLinks.length; k++) {
             subLinks[k].setAttribute("href", subLinks[k].getAttribute("href").split("#")[0] + "#" + lang);
         }
